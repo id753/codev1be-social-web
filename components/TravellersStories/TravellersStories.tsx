@@ -2,6 +2,7 @@
 
 import styles from './TravellersStories.module.css';
 import TravellersStoriesItem from '../TravellersStoriesItem/TravellersStoriesItem';
+import { User } from "@/types/user"
 
 interface Story {
   _id: string;
@@ -16,12 +17,11 @@ interface Story {
   date: string;
 }
 
-interface User {
-  _id: string;
-  name: string;
-  avatarUrl: string;
-  totalFavorites: number;
-}
+//interface User {
+//  _id: string;
+//  name: string;
+//  avatarUrl: string;
+//}
 
 interface TravellersStoriesProps {
   stories: Story[];

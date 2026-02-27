@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import LinkButton from '@/components/LinkButton/LinkButton';
 import { useRouter } from 'next/navigation';
+import { User } from "@/types/user"
 import styles from './TravellersStoriesItem.module.css';
 
 interface Story {
@@ -19,12 +20,11 @@ interface Story {
   date: string;
 }
 
-interface User {
-  _id: string;
-  name: string;
-  avatarUrl: string;
-  totalFavorites: number;
-}
+//interface User {
+//  _id: string;
+//  name: string;
+//  avatarUrl: string;
+//}
 
 interface TravellersStoriesItemProps {
   story: Story;
