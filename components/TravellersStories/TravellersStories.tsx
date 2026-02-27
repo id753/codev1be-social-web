@@ -52,6 +52,7 @@ export default function TravellersStories({
           isFavorite={favoriteStories.includes(story._id)}
           isLoading={loadingStoryId === story._id}
           onBookmarkClick={onBookmarkClick}
+          isUserLoggedIn={false}
         />
       ))}
     </div>

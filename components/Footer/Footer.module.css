@@ -80,7 +80,7 @@
   background-color: transparent;
   text-decoration: none;
   letter-spacing: 0.01em;
-  transition: 
+  transition:
     border-color 300ms ease-in-out,
     border 300ms ease-in-out;
 
@@ -113,6 +113,7 @@
   border: none;
   border-top: 1px solid rgba(26, 26, 46, 0.15);
   margin: 24px 0 32px;
+  
 }
 
 /* ── Copyright ── */
@@ -121,7 +122,7 @@
   font-size: 12px;
   line-height: 150%;
   text-align: center;
-  margin: 0;
+  margin: 0 ;
 }
 
 /* ===== Tablet — from 768px ===== */
@@ -180,7 +181,7 @@
 }
 
 /* ===== Desktop — від 1440px ===== */
-@media (min-width: 1440px) {
+ @media (min-width: 1440px) {
   .footer {
     padding-top: 80px;
     padding-bottom: 80px;
@@ -193,27 +194,35 @@
     gap: 0;
     margin-bottom: 0;
   }
-
-  .topRow > nav {
+  
+    .topRow > nav {
+    flex: 1;        
     width: auto;
-    margin-top: 0;
+    margin-left: 0;  
+    display: flex;
+    justify-content: flex-end;
   }
+
 
   .socials {
-    margin: 0 auto;
+    flex: 1;
+    justify-content: center;
     gap: 12px;
+    margin: 0 0 19px 0;
   }
+  
   .logo {
-    margin-right: auto;
+    margin-right: 0;
+    flex: 1; 
   }
 
+    
   .nav {
+    flex: 1;
     flex-direction: row;
     justify-content: flex-end;
     gap: 32px;
-    margin-top: 0;
-    margin-bottom: 0;
-    margin-left: auto;
+    margin: 0;
     width: auto;
   }
 
@@ -228,4 +237,6 @@
   .copy {
     font-size: 16px;
   }
-}
+} 
+
+
