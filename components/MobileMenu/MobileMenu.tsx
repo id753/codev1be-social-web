@@ -3,9 +3,10 @@
 import Link from 'next/link';
 import { useAuthStore } from '@/lib/store/authStore';
 import { logout } from '@/lib/api/clientApi';
+import Logo from '@/components/Logo/Logo';
+import NavLinks from '@/components/NavLinks/NavLinks';
 import css from './MobileMenu.module.css';
 import Image from 'next/image';
-import Logo from '@/components/Logo/Logo';
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -45,31 +46,17 @@ function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
         </div>
 
         <nav className={css.nav}>
-          <Link href="/" onClick={onClose} className={css.navLink}>
-            Головна
-          </Link>
-          <Link href="/stories" onClick={onClose} className={css.navLink}>
-            Історії
-          </Link>
-          <Link href="/travelers" onClick={onClose} className={css.navLink}>
-            Мандрівники
-          </Link>
-
-          {isAuthenticated && (
-            <Link href="/profile" onClick={onClose} className={css.navLink}>
-              Мій Профіль
-            </Link>
-          )}
+          <ul className={css.navList}>
+            <NavLinks onClick={onClose} showProfile={isAuthenticated} />
+          </ul>
         </nav>
 
-        {/* НИЖНЯ ЧАСТИНА: Кнопки дії */}
         <div className={css.footer}>
           {isAuthenticated ? (
-            /* ДЛЯ ЗАЛОГІНЕНОГО (МАКЕТ 2) */
             <div className={css.loggedInContent}>
-              <button className={css.blueButton} onClick={onClose}>
+              <Link href="/stories/create" className={css.blueButton}>
                 Опублікувати історію
-              </button>
+              </Link>
               <div className={css.userRow}>
                 <div className={css.avatar}>
                   {user?.avatarUrl ? (
@@ -98,7 +85,6 @@ function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
               </div>
             </div>
           ) : (
-            /* ДЛЯ ГОСТЯ (МАКЕТ 1) */
             <div className={css.guestContent}>
               <Link href="/login" className={css.grayButton} onClick={onClose}>
                 Вхід

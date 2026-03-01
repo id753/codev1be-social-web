@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import './globals.css';
 import { useState } from "react";
 import Hero from '@/components/Hero/Hero';

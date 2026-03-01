@@ -7,7 +7,7 @@ import Skeleton from '../Skeleton/Skeleton';
 
 interface StoryFormImageProps {
   onFileSelect: (file: File | null) => void;
-  initialFile?: File | null;
+  initialFile?: File | string | null;
 }
 
 const StoryFormImage = ({ onFileSelect, initialFile }: StoryFormImageProps) => {
@@ -15,17 +15,21 @@ const StoryFormImage = ({ onFileSelect, initialFile }: StoryFormImageProps) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!(initialFile instanceof File)) {
-      setPreviewUrl('');
+    if (initialFile instanceof File) {
+      const url = URL.createObjectURL(initialFile);
+      setPreviewUrl(url);
+      setLoading(true);
+      return () => URL.revokeObjectURL(url);
+    }
+
+    if (typeof initialFile === 'string') {
+      setPreviewUrl(initialFile);
       setLoading(false);
       return;
     }
 
-    const url = URL.createObjectURL(initialFile);
-    setPreviewUrl(url);
-    setLoading(true);
-
-    return () => URL.revokeObjectURL(url);
+    setPreviewUrl('');
+    setLoading(false);
   }, [initialFile]);
 
   return (

@@ -16,18 +16,34 @@
   font-size: 18px;
   background-color: var(--opacity-white-10);
   height: 35px;
+  border: 1px solid var(--opacity-transparent);
   border-radius: 8px;
   padding: 4px 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: row;
-  transition: opacity 0.3s ease;
+  transition:
+    background-color 0.3s ease-in-out,
+    border-color 0.3s ease-in-out,
+    color 0.3s ease-in-out;
 }
 
-/* .loginLink:hover {
-  opacity: 0.8;
-} */
+.loginLink:hover,
+.loginLink:focus {
+  color: var(--color-scheme-1-text);
+  background-color: var(--color-royal-blue-lighter);
+}
+
+.loginLink:active {
+  background-color: var(--color-royal-blue-light);
+}
+
+.loginLinkLight {
+  color: var(--color-neutral-darkest);
+  background-color: var(--opacity-neutral-darkest-5);
+  border-color: var(--color-scheme-2-border);
+}
 
 .authButtons .registerBtn {
   background-color: var(--color-white);
@@ -35,6 +51,7 @@
   font-weight: 500;
   font-size: 18px;
   padding: 4px 10px;
+  border: 1px solid var(--color-white);
   border-radius: 8px;
   max-width: 113px;
   height: 35px;
@@ -44,40 +61,86 @@
   justify-content: center;
   flex-direction: row;
   transition:
-    background-color 0.3s ease,
-    color 0.3s ease;
+    background-color 0.3s ease-in-out,
+    border-color 0.3s ease-in-out,
+    color 0.3s ease-in-out;
 }
 
-/* .registerBtn:hover {
-  background-color: #f0f0f0;
-} */
+.authButtons .registerBtn:hover,
+.registerBtn:focus {
+  color: var(--color-white);
+  background-color: var(--color-neutral);
+}
+
+.authButtons .registerBtn:active {
+  background-color: var(--color-neutral-dark);
+  border-color: var(--color-neutral);
+}
+
+.authButtons .registerBtnLight,
+.loginLinkLight:hover,
+.loginLinkLight:focus {
+  background-color: var(--color-royal-blue);
+  border-color: var(--color-royal-blue);
+  color: var(--color-white);
+}
+
+.loginLinkLight:active {
+  background-color: var(--color-royal-blue-darker);
+  border-color: var(--opacity-transparent);
+}
+
+.authButtons .registerBtnLight:hover,
+.authButtons .registerBtnLight:focus {
+  background-color: var(--color-royal-blue-lighter);
+  border-color: var(--color-royal-blue);
+  color: var(--color-scheme-2-text);
+}
+
+.authButtons .registerBtnLight:active {
+  background-color: var(--color-royal-blue-light);
+}
+
+.logoutButton {
+  background: none;
+  border: none;
+  border-left: 1px solid var(--opacity-white-20);
+  height: 29px;
+  padding: 8px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: currentColor;
+}
+
+.logoutButton:hover {
+  opacity: 0.7;
+}
 
 /* Стилі для залогіненого юзера */
 .userContainer {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 16px;
 }
 
 .profileLink {
   display: flex;
   align-items: center;
-  gap: 10px;
-  text-decoration: none;
-  color: white;
+  gap: 8px;
+  color: currentColor;
 }
 
 .avatarCircle {
-  width: 35px;
-  height: 35px;
-  background-color: #4f46e5;
+  width: 32px;
+  height: 32px;
+  background-color: transparent;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: bold;
   overflow: hidden;
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  border: none;
 }
 
 .avatarImg {
@@ -86,17 +149,25 @@
   object-fit: cover;
 }
 
-.logoutButton {
-  background: none;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  color: var(--color-white);
-  padding: 6px 15px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: all 0.2s;
+.userName {
+  font-size: 16px;
+  font-weight: 400;
+  color: currentColor;
+  margin-right: 8px;
 }
 
-.logoutButton:hover {
-  background: rgba(255, 255, 255, 0.1);
+.userBlockDark {
+  display: flex;
+  align-items: center;
+  color: var(--color-white);
+}
+
+.userBlockLight {
+  display: flex;
+  align-items: center;
+  color: var(--color-neutral-darkest);
+}
+
+.userBlockLight .logoutButton {
+  border-left-color: var(--opacity-neutral-darkest-15);
 }

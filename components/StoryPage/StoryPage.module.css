@@ -1,0 +1,190 @@
+/* Базовые стили (Mobile first) */
+.wrapper {
+  padding: 32px 20px;
+  width: 375px;
+  color: var(--background);
+  background: var(--color-scheme-2-background);
+
+  margin: 0 auto;
+}
+
+.article,
+.header {
+  width: 335px;
+}
+
+.header {
+  padding-top: 32px;
+}
+
+.title {
+  margin-bottom: 32px;
+  font-family: var(--second-family);
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 110%;
+  letter-spacing: -0.01em;
+  color: var(--color-scheme-2-text);
+}
+
+/* Общие правила для текстов */
+.text,
+.accent,
+.textArticle,
+.textSaveContainer {
+  font-family: var(--font-family);
+  line-height: 150%;
+}
+
+.text {
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--color-scheme-2-text);
+  margin-bottom: 16px;
+}
+
+.accent {
+  font-weight: 400;
+  font-size: 16px;
+  color: var(--color-scheme-2-text);
+}
+
+.category {
+  font-family: var(--font-family);
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 150%;
+  background: var(--opacity-neutral-darkest-5);
+  border: 1px solid var(--opacity-transparent);
+  border-radius: 6px;
+  padding: 4px 10px;
+  width: 76px;
+}
+
+.image {
+  border-radius: 24px;
+  width: 335px;
+  height: 223px;
+  margin: 16px 0 32px;
+  display: block;
+  background-color: var(--color-neutral-light); /**/
+}
+
+.textArticle {
+  font-weight: 400;
+  font-size: 16px;
+  color: var(--color-scheme-2-text);
+  padding-top: 32px;
+  margin-bottom: 24px;
+}
+
+/* Tablet (768px+) */
+@media (min-width: 768px) {
+  .wrapper {
+    padding: 32px;
+    width: 768px;
+  }
+  .article,
+  .header,
+  .title {
+    width: 704px;
+  }
+
+  .headerGroup {
+    display: flex;
+    align-items: center;
+    gap: 48px;
+  }
+
+  .title {
+    font-size: 48px;
+  }
+
+  .category {
+    color: var(--color-neutral-darkest);
+    margin-left: auto;
+  }
+
+  .image {
+    width: 704px;
+    height: 469px;
+  }
+
+  .saveContainer {
+    padding: 32px;
+    width: 418px;
+  }
+  .textSaveContainer,
+  .buttonSaveContainer {
+    width: 354px;
+  }
+}
+
+/* Desktop (1440px+) */
+@media (min-width: 1440px) {
+  .wrapper {
+    padding: 48px 64px;
+    width: 1440px;
+    background-color: var(--foreground);
+
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  .article,
+  .header,
+  .title {
+    width: 1312px;
+  }
+  .header {
+    padding-top: 48px;
+  }
+  .headerGroup {
+    margin-top: 32px;
+  }
+
+  .title {
+    font-size: 56px;
+  }
+  .text,
+  .accent {
+    font-size: 18px;
+  }
+
+  .category {
+    font-size: 16px;
+    height: 32px;
+    width: auto;
+  }
+  .image {
+    width: 1312px;
+    height: 874px;
+    margin-bottom: 48px;
+  }
+
+  .textArticleGroup {
+    display: flex;
+    gap: 24px;
+  }
+  .textArticle {
+    font-size: 18px;
+    width: 865px;
+    height: 162px;
+  }
+
+  .saveContainer {
+    display: inline-block;
+    width: 418px;
+  }
+  .titleSaveContainer {
+    font-size: 26px;
+  }
+  .textSaveContainer {
+    font-size: 18px;
+  }
+  .buttonSaveContainer {
+    font-size: 18px;
+  }
+}

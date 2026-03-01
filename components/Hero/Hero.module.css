@@ -109,7 +109,7 @@
         url('/img/sections/hero/hero-bg-desktop.webp') 1x,
         url('/img/sections/hero/hero-bg-desktop@2x.webp') 2x
       );
-    padding: 224px 0px 347px;
+    padding: 244px 0px 347px;
     min-height: 900px;
   }
 

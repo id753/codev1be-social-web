@@ -27,7 +27,7 @@ export default function TravellerInfo({ traveller }: Props) {
 
       <Link
         href={`/travellers/${traveller._id}`}
-        className={css.profileButton}
+        className={`${css.buttonBase} ${css.profileButton}`}
       >
         Переглянути профіль
       </Link>

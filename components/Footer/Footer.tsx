@@ -1,9 +1,10 @@
 'use client';
+
 import css from './Footer.module.css';
-import Link from 'next/link';
-import { useState, useEffect } from 'react';
-import { nextServer } from '@/lib/api/api';
+import { useAuthStore } from '@/lib/store/authStore';
 import Logo from '@/components/Logo/Logo';
+import NavLinks from '@/components/NavLinks/NavLinks';
+import { socials } from '@/components/Footer/socials';
 
 const SPRITE = '/svg/icons.svg';
 
@@ -20,39 +21,9 @@ function Icon({ id }: IconProps) {
   );
 }
 
-const socials = [
-  { id: 'Facebook1', href: 'https://facebook.com', label: 'Facebook' },
-  { id: 'Instagram', href: 'https://instagram.com', label: 'Instagram' },
-  { id: 'X', href: 'https://x.com', label: 'X' },
-  { id: 'Youtube', href: 'https://youtube.com', label: 'YouTube' },
-];
-
-const navBase = [
-  { href: '/', label: 'Головна' },
-  { href: '/stories', label: 'Історії' },
-  { href: '/travelers', label: 'Мандрівники' },
-];
-
-const navProfile = { href: '/profile', label: 'Профіль' };
-
-export default function Footer() {
+function Footer() {
   const year = new Date().getFullYear();
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await nextServer.get('/api/users/me');
-        setIsLoggedIn(res.status === 200);
-      } catch {
-        setIsLoggedIn(false);
-      }
-    };
-
-    fetchUser();
-  }, []);
-
-  const nav = isLoggedIn ? [...navBase, navProfile] : navBase;
+  const { isAuthenticated } = useAuthStore();
 
   return (
     <footer className={css.footer}>
@@ -76,15 +47,9 @@ export default function Footer() {
             ))}
           </ul>
 
-          <nav aria-label="Навігація футера">
-            <ul className={css.nav}>
-              {nav.map(({ href, label }) => (
-                <li key={href}>
-                  <Link href={href} className={css.navLink}>
-                    {label}
-                  </Link>
-                </li>
-              ))}
+          <nav className={css.nav} aria-label="Навігація футера">
+            <ul className={css.navList}>
+              <NavLinks showProfile={isAuthenticated} />
             </ul>
           </nav>
         </div>
@@ -96,3 +61,5 @@ export default function Footer() {
     </footer>
   );
 }
+
+export default Footer;

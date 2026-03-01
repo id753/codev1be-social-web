@@ -87,7 +87,10 @@
   color: var(--color-neutral-darkest);
   background-color: var(--color-royal-blue-lighter);
 }
-
+.buttonSave:active {
+  color: var(--color-neutral-darkest);
+  background-color: var(--color-royal-blue-light);
+}
 .buttonDisabled {
   opacity: 0.3;
   cursor: not-allowed;
@@ -97,6 +100,7 @@
   border-color: var(--color-royal-blue);
   color: var(--color-white);
 }
+
 .buttonCancel {
   border: 1px solid var(--opacity-neutral-darkest-15);
   background-color: var(--opacity-neutral-darkest-5);
@@ -107,16 +111,26 @@
   border-color: var(--color-royal-blue);
   color: var(--color-white);
 }
-
+.buttonCancel:active {
+  background-color: var(--color-royal-blue-darker);
+  border-color: var(--opacity-transparent);
+  color: var(--color-white);
+}
 .error {
-  color: #e53935;
+  /* color: #e53935; */
   font-size: 12px;
   margin-top: 4px;
+}
+.inputError {
+  border-color: var(--color-red);
+  color: var(--color-red);
+}
+.inputError::placeholder {
+  color: var(--color-red);
 }
 @media screen and (min-width: 320px) {
   .form {
     flex-direction: column;
-    padding-bottom: 36px;
   }
   .columRight {
     width: 100%;
@@ -147,9 +161,6 @@
   }
 }
 @media screen and (min-width: 375px) {
-  .form {
-    padding-bottom: 64px;
-  }
   .formTextarea {
     font-size: 16px;
   }
@@ -177,7 +188,6 @@
   .form {
     justify-content: space-between;
     flex-direction: row;
-    padding-bottom: 72px;
   }
   .columLeft {
     max-width: 865px;

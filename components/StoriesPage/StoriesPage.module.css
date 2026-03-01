@@ -1,11 +1,5 @@
 .section {
-  padding-top: 32px; /* Зменшено верхній відступ для мобільних пристроїв */
-}
-
-.sectionTitle {
-  line-height: 1.1;
-  /* letter-spacing: 0.01em; */
-  text-align: center;
+  padding-top: 32px;
 }
 
 .container {
@@ -14,46 +8,169 @@
   gap: 40px;
 }
 
+.sectionTitle {
+  font-family: var(--second-family);
+  line-height: 1.1;
+  text-align: center;
+  letter-spacing: -0.01em;
+}
+
+/* ??? */
 .filterSection {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-/* Mobile dropdown */
-.filterDropdown {
+.filterHeading {
   font-family: var(--font-family);
-  border: 1px solid var(--opacity-neutral-darkest-15);
-  border-radius: 8px;
-  padding: 8px;
-  background: var(--opacity-transparent);
-  /*  */
-  position: relative;
-  display: flex;
-  align-items: center;
-  height: 40px;
-  gap: 16px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-scheme-1-text);
+  margin: 0;
+  padding: 0;
 }
 
-.filterSelect {
-  flex: 1;
-  font-size: 16px;
+/* Mobile dropdown */
+.filterDropdown {
+  border: 1px solid var(--opacity-neutral-darkest-15);
+  border-radius: 8px;
+  background: var(--opacity-transparent);
+  position: relative;
+  display: block;
+  transition: all 300ms ease-in-out;
+  height: 43px;
+}
+
+.filterDropdown:hover {
+  background-color: var(--color-royal-blue-lighter);
+}
+
+.filterDropdownOpen {
+  border-radius: 8px 8px 0 0;
+  border-color: var(--color-royal-blue-light);
+}
+
+.filterSelectButton {
+  width: 100%;
+  padding: 4px 8px;
+  font-family: var(--font-family);
+  font-size: 18px;
   font-weight: 400;
+  line-height: 150%;
   color: var(--color-scheme-1-text);
-  background: inherit;
+  background: transparent;
   border: none;
   outline: none;
   cursor: pointer;
-  appearance: none;
-  -webkit-appearance: none; /* Для Safari */
-  -moz-appearance: none; /* Для Firefox */
+  text-align: left;
+  display: flex;
+  align-items: center;
+  position: relative;
+  border: 1px solid transparent;
+  height: 43px;
+}
+
+.filterSelectButton:focus,
+.filterSelectButton:hover {
+  outline: none; /* Збережено фокус для доступності */
+  border: 1px solid var(--color-royal-blue-light);
+  background: var(--opacity-transparent);
+  border-radius: 8px;
+  height: 43px;
+  color: var(--color-scheme-1-text);
+}
+
+.filterDropdownOpen .filterSelectButton,
+.filterDropdownOpen .filterSelectButton:hover,
+.filterDropdownOpen .filterSelectButton:focus {
+  border-radius: 8px 8px 0 0;
+  height: 43px;
+  border: 1px solid var(--opacity-neutral-darkest-15);
+}
+
+.filterSelectButton:active {
+  border-radius: 8px 8px 0 0;
+  height: 43px;
+}
+
+.filterSelectButton:active,
+.filterSelectButtonOpen {
+  border: 1px solid var(--color-royal-blue-light);
+  background: var(--color-royal-blue-lighter);
+  border-radius: 8px 8px 0 0;
+  color: var(--color-scheme-1-text);
+}
+
+.filterSelectText {
+  flex: 1;
 }
 
 .iconRight {
-  /* color: rgba(0, 0, 0, 0.6); */
-  flex-shrink: 0;
-  pointer-events: none;
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
   fill: var(--opacity-neutral-darkest-60);
+  transition: transform 300ms ease-in-out;
+  pointer-events: none;
+}
+
+.iconRotated {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+.filterDropdownList {
+  position: absolute;
+  top: 100%;
+  left: -1px;
+  right: -1px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background: var(--color-white);
+  border: 1px solid var(--color-royal-blue-light);
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  max-height: 274px;
+  overflow-y: auto;
+  z-index: 100;
+}
+
+.filterDropdownItem {
+  margin: 0;
+  padding: 4px 8px;
+  border-radius: 8px;
+}
+
+.filterDropdownOption {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-family: var(--font-family);
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 150%;
+  color: var(--color-scheme-1-text);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  display: block;
+  min-height: 43px;
+  transition: background-color 300ms ease-in-out;
+}
+
+.filterDropdownOption:hover {
+  background: var(--color-neutral-lightest);
+}
+
+.filterDropdownOptionActive {
+  background: var(--color-neutral-lightest);
+}
+  
+.filterDropdownOptionActive:hover {
+  background: var(--color-neutral-lightest);
 }
 
 /* Desktop tabs */
@@ -62,34 +179,42 @@
 }
 
 .filterBtn {
-  padding: 10px 20px;
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--color-neutral);
-  background: transparent;
-  border: 1.5px solid var(--color-neutral-lighter);
+  border: 1px solid var(--opacity-transparent);
   border-radius: 8px;
-  cursor: pointer;
-  transition: all 300ms ease-in-out;
+  padding: 6px 12px;
+  height: 36px;
+  background: var(--opacity-transparent);
+  font-family: var(--font-family);
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 1.5;
+  color: var(--color-scheme-1-text);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   white-space: nowrap;
-  flex-shrink: 0;
+  cursor: pointer;
+  transition:
+    background-color 300ms ease-in-out,
+    border-color 300ms ease-in-out,
+    color 300ms ease-in-out;
 }
 
 .filterBtn:hover {
-  border-color: var(--color-royal-blue);
-  color: var(--color-royal-blue);
-  background: var(--color-royal-blue-lighter);
+  border-color: var(--opacity-transparent);
+  color: var(--color-scheme-1-text);
+  background: var(--color-scheme-1-foreground);
 }
 
 .filterBtnActive {
-  background: var(--color-royal-blue);
-  color: var(--color-white);
-  border-color: var(--color-royal-blue);
+  background: var(--color-scheme-1-foreground);
+  color: var(--color-scheme-1-text);
+  border-color: var(--opacity-transparent);
 }
 
 .filterBtnActive:hover {
-  background: var(--color-royal-blue-dark);
-  border-color: var(--color-royal-blue-dark);
+  background: var(--color-scheme-1-foreground);
+  border-color: var(--opacity-transparent);
 }
 
 .noResults {
@@ -112,7 +237,7 @@
 
 .loadMoreBtn {
   display: block;
-  margin: 48px auto 0;
+  margin: 0 auto;
   padding: 16px 48px;
   font-size: 16px;
   font-weight: 600;
@@ -131,16 +256,28 @@
 
 /* Tablet (768px) */
 @media (min-width: 768px) {
-  .heading {
-    font-size: 36px;
-    margin-bottom: 28px;
+  .section {
+    padding-top: 32px; /* Збережено верхній відступ для планшетів */
   }
 
-  /* .filterHeading {
-    font-size: 18px;
-    margin-bottom: 16px;
-    text-align: center;
-  } */
+  .sectionTitle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 53px;
+  }
+
+  .filterHeading {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
 
   /* Hide mobile dropdown on tablet/desktop */
   .filterDropdown {
@@ -154,11 +291,6 @@
     gap: 8px;
     flex-wrap: wrap;
   }
-
-  .filterBtn {
-    padding: 12px 24px;
-    font-size: 15px;
-  }
 }
 
 /* Desktop (1440px) */
@@ -167,18 +299,16 @@
     padding-top: 48px; /* Збільшено верхній відступ для десктопів */
   }
 
+  .sectionTitle {
+    min-height: 62px;
+  }
+
   .heading {
     font-size: 42px;
     margin-bottom: 32px;
   }
 
-  /* .filterHeading {
-    font-size: 20px;
-    margin-bottom: 20px;
-  } */
-
   .filterBtn {
-    padding: 12px 28px;
-    font-size: 16px;
+    height: 39px;
   }
 }

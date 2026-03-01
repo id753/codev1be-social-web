@@ -2,7 +2,7 @@
   width: 100%;
   z-index: 100;
   padding: 16px 0;
-  transition: all 0.3s ease;
+  transition: all 0.3s ease-in-out;
 }
 
 .headerContainer {
@@ -12,39 +12,28 @@
 }
 
 .homeHeader {
-  position: relative;
-  z-index: 10;
   background: transparent;
   color: var(--color-white);
 }
 
-.homeHeader a {
-  color: var(--color-white);
-}
-
 .pageHeader {
-  position: relative;
-  background-color: #ffffff;
+  background-color: var(--color-royal-blue-lightest);
   color: currentColor;
-  border-bottom: 1px solid #f0f0f0;
 }
 
-.pageHeader a {
-  color: #111827;
+.desktopNav {
+  display: none;
+  align-items: center;
+  gap: 40px;
 }
 
-.header a {
-  color: var(--color-white);
-  font-weight: 400;
-  font-size: 18px;
-  line-height: 1.5;
-  color: var(--color-scheme-1-background);
-
-  transition: color 300ms ease-in-out;
-}
-
-.header a:hover {
-  color: #ddd;
+.navList {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
 .menuBtn {
@@ -54,59 +43,34 @@
   width: 32px;
   height: 32px;
   background: var(--opacity-white-10);
-
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: row;
-  gap: 12px;
 }
 
-.navigation {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
+.mobileActions {
   display: flex;
   align-items: center;
-  gap: 32px;
-}
-
-.navigation li a {
-  color: var(--color-white);
-  font-size: 1rem;
-
-  transition: color 300ms ease-in-out;
-}
-
-.navigation li a:hover {
-  color: #ddd;
-}
-
-.desktopNav {
-  display: none;
-  align-items: center;
-  gap: 40px;
-}
-
-.navLinks {
-  display: flex;
-  gap: 32px;
+  gap: 16px;
 }
 
 @media (min-width: 1440px) {
-  .homeHeader {
-    padding: 16px 0px;
-  }
   .desktopNav {
     display: flex;
+  }
+
+  .navLink {
+    padding: 16px 0;
+  }
+
+  .navLinkLight {
+    font-size: 18px;
   }
 
   .menuBtn {
     display: none;
   }
-  .navigation li a {
-    font-size: 18px;
-  }
+
   .mobileActions {
     display: none;
   }

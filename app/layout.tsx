@@ -8,6 +8,9 @@ import QueryProvider from './providers/QueryProvider';
 import ToastProvider from '@/components/ToastProvider/ToastProvider';
 import AuthNavModal from '@/components/AuthNavModal/AuthNavModal';
 
+import { getMeServer } from '@/lib/api/serverApi'; 
+import { User } from '@/types/user';
+
 const nunito = Nunito_Sans({
   variable: '--font-nunito-sans',
   weight: ['400', '500', '600', '700'],
@@ -22,66 +25,80 @@ const inter = Inter({
   display: 'swap',
 });
 
-const baseUrl = process.env.NEXT_PUBLIC_APP_URL!;
+const baseUrl = process.env.NEXT_PUBLIC_APP_URL;
 
 export const metadata: Metadata = {
-  metadataBase: new URL(baseUrl),
+  metadataBase: new URL(baseUrl!),
 
   title: {
     default: 'Подорожники',
     template: '%s | Подорожники',
   },
   description:
-    'Подорожники — платформа для публікації історій, подорожей та досвіду.',
+    'Платформа для мандрівників: переглядай історії інших та діліться своїми пригодами.',
   keywords: ['travel', 'stories', 'social network', 'nextjs'],
+
   openGraph: {
     title: 'Подорожники',
     description:
-      'Подорожники — платформа для публікації історій, подорожей та досвіду.',
-    url: baseUrl,
+      'Платформа для мандрівників: переглядай історії інших та діліться своїми пригодами.',
+    url: '/',
     siteName: 'Подорожники',
     locale: 'uk_UA',
     type: 'website',
     images: [
       {
-        url: '/preview.png',
+        url: `${baseUrl}/preview.png`,
         width: 1200,
         height: 630,
-        alt: 'Podorozhnyky preview',
+        alt: 'Podorozhnyky preview image',
       },
     ],
   },
+
   twitter: {
     card: 'summary_large_image',
     title: 'Подорожники',
     description:
-      'Подорожники — платформа для публікації історій, подорожей та досвіду.',
+      'Платформа для мандрівників: переглядай історії інших та діліться своїми пригодами.',
     images: ['/preview.png'],
   },
   icons: {
-    icon: [{ url: '/favicon.ico' }],
-  },
-  alternates: {
-    canonical: '/',
+    icon: '/favicon.ico',
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
+  let user: User | null = null;
+
+  try {
+    user = await getMeServer();
+  } catch {
+    user = null;
+  }
+
   return (
     <html lang="uk">
-      <body className={`${nunito.variable} ${inter.variable}`}>
+      <body
+        className={`
+     ${nunito.variable}
+     ${inter.variable}
+    `}
+      >
         <QueryProvider>
           <Header />
+          {/* <Header user={user} /> */}
           <main>{children}</main>
+           {/* <Footer user={user} /> */}
           <Footer />
-
+          
           <ToastProvider />
           <AuthNavModal />
-          <div id="modal-root"></div>
+          <div id="modal-root" />
         </QueryProvider>
       </body>
     </html>

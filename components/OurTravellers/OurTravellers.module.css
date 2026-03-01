@@ -5,6 +5,10 @@
     background-color: var(--color-scheme-2-background);
 }
 
+.sectionPadding {
+    padding-top: 32px;
+}
+
 .inner {
     display: flex;
     flex-direction: column;
@@ -31,7 +35,7 @@
 
 .pageTitle {
     text-align: center;
-    margin-bottom: 48px;
+    padding-bottom: 24px;
 }
 
 /* ====================
@@ -99,9 +103,22 @@
     overflow: hidden;
 }
 
+/* =====================
+   Базові стилі для кнопок
+======================== */
+.buttonBase {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 48px;
+}
+
+/* =============
+   Кнопка картки
+================ */
+
 .profileButton {
     width: 100%;
-    text-align: center;
     margin-top: auto;
     padding: 6px 12px;
     background-color: var(--opacity-neutral-darkest-5);
@@ -112,9 +129,7 @@
     border: 1px solid var(--color-scheme-2-border);
     border-radius: 8px;
     text-decoration: none;
-    transition: 
-        background-color 300ms ease-in-out,
-        color 300ms ease-in-out;
+    transition: background-color 300ms ease-in-out, color 300ms ease-in-out;
 }
 
 .profileButton:hover,
@@ -139,9 +154,8 @@
    Кнопка "Переглянути всіх - Показати ще"
 ==================== */
 .viewAllBtn {
-    display: block;
-    width: fit-content;
-    margin: 48px auto 0;
+    width: 100%;
+    margin-top: 24px;
     padding: 6px 12px;
     background-color: var(--color-royal-blue);
     font-weight: 600;
@@ -151,11 +165,7 @@
     border: 1px solid var(--color-royal-blue);
     border-radius: 8px;
     text-decoration: none;
-    text-align: center;
-
-    transition: 
-        background-color 300ms ease-in-out,
-        color 300ms ease-in-out;
+    transition: background-color 300ms ease-in-out, color 300ms ease-in-out;
 }
 
 .viewAllBtn:hover,
@@ -184,15 +194,23 @@
     .inner {
         --columns: 2;
         --card-width: 340px;
-        --gap: 24px;
-    }    
+    }
+    
+    .viewAllBtn {
+        max-width: 125px;
+        margin-left: auto;
+        margin-right: auto;
+    }
 }
 
 /* Desktop */
 @media (min-width: 1440px) {
+    .sectionPadding {
+        padding-top: 72px;
+    }
+
     .inner {
         --columns: 4;
         --card-width: 310px;
-        --gap: 32px;
     }
 }

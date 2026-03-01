@@ -1,60 +1,35 @@
 'use client';
 
 import css from './PopularStoriesSection.module.css';
+
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { nextServer } from '@/lib/api/api';
+import { fetchStories, addToFavouriteStory } from '@/lib/api/clientApi';
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import Skeleton from '../Skeleton/Skeleton';
 
 import { useAuth } from '@/hooks/useAuth';
+
 import { useAuthModalStore } from '@/lib/store/authModalStore';
 
 import toast from 'react-hot-toast';
 
-type IconProps = {
-  id: string;
-  className?: string;
-};
-
-type Story = {
-  _id: string;
-
-  img: string;
-
-  title: string;
-
-  article: string;
-
-  category: {
-    _id: string;
-    name: string;
-  };
-
-  ownerId: {
-    _id: string;
-    name: string;
-    avatarUrl: string;
-  };
-
-  date: string;
-
-  favoriteCount: number;
-};
+import { Story } from '@/types/story';
 
 type Resp = {
   stories: Story[];
-
   totalStories: number;
-
   page: number;
-
   perPage: number;
-
   totalPages: number;
+};
+
+type IconProps = {
+  id: string;
+  className?: string;
 };
 
 const SPRITE = '/svg/icons.svg';
@@ -67,28 +42,18 @@ function Icon({ id, className }: IconProps) {
   );
 }
 
-/// API
-
 const getStories = async (): Promise<Resp> => {
-  const { data } = await nextServer.get('/api/stories?perPage=4');
+  return await fetchStories({
+    page: 1,
 
-  return data;
-};
-
-const addToFav = async (id: string) => {
-  const { data } = await nextServer.post(`/api/stories/${id}/save`);
-
-  return data;
+    perPage: 4,
+  });
 };
 
 export default function PopularStoriesSection() {
-  /// auth
-
   const { isAuthenticated } = useAuth();
 
   const { open } = useAuthModalStore();
-
-  /// react query
 
   const queryClient = useQueryClient();
 
@@ -99,19 +64,17 @@ export default function PopularStoriesSection() {
 
     isError,
   } = useQuery({
-    queryKey: ['Stories'],
+    queryKey: ['stories'],
 
     queryFn: getStories,
   });
 
-  /// mutation
-
   const mutation = useMutation({
-    mutationFn: addToFav,
+    mutationFn: addToFavouriteStory,
 
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['Stories'],
+        queryKey: ['stories'],
       });
     },
 
@@ -120,11 +83,7 @@ export default function PopularStoriesSection() {
     },
   });
 
-  /// click handler
-
   const handleSave = (id: string) => {
-    /// якщо НЕ авторизований
-
     if (!isAuthenticated) {
       open();
 
@@ -134,11 +93,7 @@ export default function PopularStoriesSection() {
     mutation.mutate(id);
   };
 
-  /// error
-
   if (isError) return <p className={css.msg}>Error</p>;
-
-  /// render
 
   return (
     <section className="section">
@@ -147,17 +102,13 @@ export default function PopularStoriesSection() {
 
         {isLoading ? (
           <div className={css.loader}>
-            {Array.from({
-              length: 3,
-            }).map((_, index) => (
-              <Skeleton key={index} height={397} />
+            {Array.from({ length: 3 }).map((_, i) => (
+              <Skeleton key={i} height={397} />
             ))}
           </div>
         ) : (
           <ul className={css.articleList}>
             {data?.stories.map((story) => {
-              /// loader тільки на цій кнопці
-
               const isSaving =
                 mutation.isPending && mutation.variables === story._id;
 

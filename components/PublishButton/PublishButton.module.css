@@ -1,0 +1,68 @@
+.publishBtnDark,
+.publishBtnLight {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .publishBtnDark,
+  .publishBtnLight {
+    font-weight: 500;
+    font-size: 16px;
+    padding: 4px 10px;
+    border-radius: 8px;
+    height: 32px;
+    max-width: 182px;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition:
+      background-color 0.3s ease-in-out,
+      border-color 0.3s ease-in-out,
+      color 0.3s ease-in-out;
+  }
+
+  .publishBtnDark {
+    background-color: var(--color-white);
+    color: var(--color-neutral-darkest);
+    border: 1px solid var(--color-white);
+  }
+
+  .publishBtnDark:hover,
+  .publishBtnDark:focus {
+    color: var(--color-white);
+    background-color: var(--color-neutral);
+  }
+
+  .publishBtnDark:active {
+    background-color: var(--color-neutral-dark);
+    border-color: var(--color-neutral);
+  }
+
+  .publishBtnLight {
+    background-color: var(--color-royal-blue);
+    color: var(--color-white);
+    border: 1px solid var(--color-royal-blue);
+  }
+
+  .publishBtnLight:hover,
+  .publishBtnLight:focus {
+    background-color: var(--color-royal-blue-lighter);
+    border-color: var(--color-royal-blue);
+    color: var(--color-scheme-2-text);
+  }
+
+  .publishBtnLight:active {
+    background-color: var(--color-royal-blue-light);
+    border-color: var(--color-royal-blue-light);
+  }
+}
+
+@media (min-width: 1440px) {
+  .publishBtnDark,
+  .publishBtnLight {
+    font-size: 18px;
+    max-width: 202px;
+  }
+}

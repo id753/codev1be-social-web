@@ -1,0 +1,273 @@
+/* MOBILE: 320px - 374px */
+.authWrapper {
+  flex: 1;
+  width: 100%;
+  background: #d7d2cd;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+}
+
+.authCard {
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  padding: 40px 20px;
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.inner {
+  width: 100%;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: start;
+}
+
+.content {
+  width: 100%;
+  max-width: 424px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  justify-content: center;
+  gap: 48px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #e6e6e6;
+  padding-bottom: 8px;
+}
+
+.tab {
+  font-size: 16px;
+  text-decoration: none;
+  color: rgba(17, 17, 17, 0.55);
+  padding-bottom: 8px;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: all 300ms ease-in-out;
+}
+
+.tab:hover {
+  color: rgba(17, 17, 17, 0.75);
+}
+
+.tabActive {
+  color: #111;
+  border-bottom-color: #111;
+}
+
+/* Title */
+.title {
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 120%;
+  letter-spacing: -0.01em;
+  text-align: center;
+  color: #000;
+}
+
+.subtitle {
+  text-align: center;
+  font-size: 14px;
+  color: rgba(17, 17, 17, 0.75);
+  margin: 0 0 24px;
+}
+
+/* Form */
+.form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  font-size: 12px;
+  color: rgba(17, 17, 17, 0.8);
+  font-weight: 500;
+}
+
+.input {
+  height: 44px;
+  padding: 0 12px;
+  border-radius: 8px;
+  border: 1px solid #e6e6e6;
+  font-size: 14px;
+  outline: none;
+  transition: all 300ms ease-in-out;
+  font-family: inherit;
+}
+
+.input::placeholder {
+  color: rgba(17, 17, 17, 0.4);
+}
+
+.input:focus {
+  border-color: #4f6ef7;
+  box-shadow: 0 0 0 4px rgba(79, 110, 247, 0.15);
+}
+
+.button {
+  height: 44px;
+  margin-top: 8px;
+  border-radius: 8px;
+  border: none;
+  background: #4f6ef7;
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 300ms ease-in-out;
+}
+
+.button:hover:not(:disabled) {
+  background: #e8eeff;
+  border: 1px solid #4169e1;
+  color: #111;
+}
+
+.button:focus:not(:disabled) {
+  border: 1px solid #4169e1;
+  border-radius: 8px;
+  padding: 4px 10px;
+  width: 76px;
+  height: 35px;
+  background: #e8eeff;
+}
+
+.button:active:not(:disabled) {
+  border: 1px solid #4169e1;
+  border-radius: 8px;
+  padding: 6px 12px;
+  background: #7a96ea;
+}
+
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ADAPTIVE: 375px+ */
+@media (min-width: 375px) {
+  .authCard {
+    padding: 40px 20px;
+  }
+}
+
+/* TABLET: 768px+ */
+@media (min-width: 768px) {
+  .authWrapper {
+    padding: 0;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .authCard {
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    padding: 64px 32px;
+  }
+
+  .inner {
+    width: 100%;
+    padding: 0;
+    align-items: start;
+  }
+
+  .content {
+    width: 100%;
+    max-width: 600px;
+  }
+
+  .tabs {
+    gap: 64px;
+    margin-bottom: 32px;
+  }
+
+  .title {
+    font-size: 36px;
+    margin-bottom: 12px;
+  }
+
+  .subtitle {
+    font-size: 16px;
+    margin-bottom: 32px;
+  }
+
+  .form {
+    gap: 20px;
+  }
+
+  .input {
+    height: 40px;
+  }
+
+  .button {
+    height: 40px;
+  }
+}
+
+/* DESKTOP: 1440px+ */
+@media (min-width: 1440px) {
+  .authWrapper {
+    padding: 0;
+  }
+
+  .authCard {
+    width: 100%;
+    padding: 64px 64px;
+  }
+
+  .inner {
+    width: 100%;
+    justify-content: center;
+    align-items: start;
+  }
+
+  .content {
+    width: 100%;
+    max-width: 600px;
+  }
+
+  .tabs {
+    gap: 72px;
+    margin-bottom: 48px;
+  }
+
+  .title {
+    font-size: 44px;
+    margin-bottom: 16px;
+  }
+
+  .subtitle {
+    font-size: 16px;
+    margin-bottom: 40px;
+  }
+
+  .form {
+    gap: 24px;
+  }
+
+  .button {
+    height: 40px;
+    margin-top: 16px;
+  }
+}

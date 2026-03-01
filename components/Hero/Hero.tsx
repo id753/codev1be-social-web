@@ -1,4 +1,5 @@
 import css from './Hero.module.css';
+import Link from 'next/link';
 
 function Hero() {
   return (
@@ -11,7 +12,10 @@ function Hero() {
             своїми історіями та отримувати натхнення для нових пригод. Відкрийте
             для себе нові місця та знайдіть однодумців!
           </p>
-          <button className={css.ctaButton}>Доєднатись</button>
+          {/* <button className={css.ctaButton}>Доєднатись</button> */}
+          <Link href="#join" className={css.ctaButton}>
+            Доєднатись
+          </Link>
         </div>
       </div>
     </section>

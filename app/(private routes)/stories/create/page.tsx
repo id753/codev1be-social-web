@@ -1,6 +1,7 @@
-import AddStoryForm from '@/components/AddStoryForm/AddStoryForm';
 import css from './CreateStory.module.css';
+import AddStoryForm from '@/components/AddStoryForm/AddStoryForm';
 import { Metadata } from 'next';
+
 export const metadata: Metadata = {
   title: 'Create a new story',
   description: 'Create a new story',
@@ -18,15 +19,23 @@ export const metadata: Metadata = {
     ],
   },
 };
-const page = () => {
+
+const CreateStoryPage = () => {
+  const initialValues = {
+    img: null,
+    title: '',
+    category: '',
+    article: '',
+  };
+
   return (
-    <section>
+    <section className={css.createStorySection}>
       <div className="container">
         <h1 className={css.createStoryTitle}>Створити нову історію</h1>
-        <AddStoryForm />
+        <AddStoryForm initialValues={initialValues} />
       </div>
     </section>
   );
 };
 
-export default page;
+export default CreateStoryPage;

@@ -2,43 +2,18 @@
 
 import styles from './TravellersStories.module.css';
 import TravellersStoriesItem from '../TravellersStoriesItem/TravellersStoriesItem';
-import { User } from "@/types/user"
-
-interface Story {
-  _id: string;
-  img: string;
-  title: string;
-  article?: string;
-  description?: string;
-  category: string;
-  ownerId: string;
-  ownerUser?: User;
-  favoriteCount: number;
-  date: string;
-}
-
-//interface User {
-//  _id: string;
-//  name: string;
-//  avatarUrl: string;
-//}
+import type { StoryCard, StoryCardUser } from '@/types/story';
 
 interface TravellersStoriesProps {
-  stories: Story[];
-  usersMap: Record<string, User>;
+  stories: StoryCard[];
+  usersMap: Record<string, StoryCardUser>;
   categoryMap: Record<string, string>;
-  favoriteStories: string[];
-  loadingStoryId: string | null;
-  onBookmarkClick: (storyId: string) => void;
 }
 
 export default function TravellersStories({
   stories,
   usersMap,
   categoryMap,
-  favoriteStories,
-  loadingStoryId,
-  onBookmarkClick,
 }: TravellersStoriesProps) {
   return (
     <div className={styles.grid}>
@@ -49,10 +24,6 @@ export default function TravellersStories({
           user={story.ownerUser || usersMap[story.ownerId]}
           categoryName={categoryMap[story.category] || 'Категорія'}
           priority={index === 0}
-          isFavorite={favoriteStories.includes(story._id)}
-          isLoading={loadingStoryId === story._id}
-          onBookmarkClick={onBookmarkClick}
-          isUserLoggedIn={false}
         />
       ))}
     </div>
