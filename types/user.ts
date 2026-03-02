@@ -5,5 +5,5 @@ export interface User {
   avatarUrl?: string;
   articlesAmount: number;
   description?: string;
-  favoriteStories: string[];
+  savedArticles: string[];
 }
