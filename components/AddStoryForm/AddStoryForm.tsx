@@ -21,24 +21,24 @@ const MAX_FILE_SIZE = 2 * 1024 * 1024;
 
 const baseSchema = {
   title: Yup.string()
-    .required('Title is required')
-    .min(5, 'Minimum 5 characters')
-    .max(MAX_TITLE, `Maximum ${MAX_TITLE} characters`),
+    .required('Заголовок є обовʼязковим')
+    .min(5, 'Мінімум 5 символів')
+    .max(MAX_TITLE, `Максимум ${MAX_TITLE} символів`),
 
-  category: Yup.string().required('Please select a category'),
+  category: Yup.string().required('Оберіть категорію'),
 
   article: Yup.string()
-    .required('Story text is required')
-    .min(5, 'Minimum 5 characters')
-    .max(MAX_TEXT, `Maximum ${MAX_TEXT} characters`),
+    .required('Текст історії є обовʼязковим')
+    .min(5, 'Мінімум 5 символів')
+    .max(MAX_TEXT, `Максимум ${MAX_TEXT} символів`),
 };
 
 const createValidationSchema = Yup.object({
   img: Yup.mixed<File>()
     .nullable()
-    .required('Cover image is required')
-    .test('fileSize', 'Max image size is 2MB', (value) => {
-      if (!(value instanceof File)) return false; // ✅ create: строго File
+    .required('Обкладинка є обовʼязковою')
+    .test('fileSize', 'Максимальний розмір зображення — 2MB', (value) => {
+      if (!(value instanceof File)) return false;
       return value.size <= MAX_FILE_SIZE;
     }),
   ...baseSchema,
@@ -46,15 +46,14 @@ const createValidationSchema = Yup.object({
 
 const editValidationSchema = Yup.object({
   img: Yup.mixed<File | string>()
-    .required('Cover image is required')
-    .test('fileSize', 'Max image size is 2MB', (value) => {
+    .required('Обкладинка є обовʼязковою')
+    .test('fileSize', 'Максимальний розмір зображення — 2MB', (value) => {
       if (!value) return false;
       if (value instanceof File) return value.size <= MAX_FILE_SIZE;
-      return typeof value === 'string' && value.length > 0; // ✅ edit: URL ок
+      return typeof value === 'string' && value.length > 0;
     }),
   ...baseSchema,
 });
-
 type StoryFormValues = {
   img: File | string | null;
   title: string;
