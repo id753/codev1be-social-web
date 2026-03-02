@@ -63,7 +63,7 @@ export default function RegisterPage() {
 
                 try {
                   // ✅ напрямую на backend
-                  await nextServer.post('/api/auth/register', values);
+                  await nextServer.post('/auth/register', values);
 
                   router.push('/');
                   router.refresh();

@@ -1,20 +1,17 @@
 /* Базовые стили (Mobile first) */
 .wrapper {
   padding: 32px 20px;
-  width: 375px;
+  width: 100%;
+  max-width: 375px;
   color: var(--background);
   background: var(--color-scheme-2-background);
-
   margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .article,
 .header {
   width: 335px;
-}
-
-.header {
-  padding-top: 32px;
 }
 
 .title {
@@ -40,7 +37,6 @@
   font-weight: 700;
   font-size: 16px;
   color: var(--color-scheme-2-text);
-  margin-bottom: 16px;
 }
 
 .accent {
@@ -61,13 +57,22 @@
   width: 76px;
 }
 
+.article,
+.header {
+  width: 100%;
+  max-width: 335px;
+}
+
 .image {
+  height: auto;
+  aspect-ratio: 335 / 223;
   border-radius: 24px;
-  width: 335px;
-  height: 223px;
+  width: 100%;
+  max-width: 335px;
+  height: auto;
   margin: 16px 0 32px;
   display: block;
-  background-color: var(--color-neutral-light); /**/
+  background-color: var(--color-neutral-light);
 }
 
 .textArticle {
@@ -81,18 +86,26 @@
 /* Tablet (768px+) */
 @media (min-width: 768px) {
   .wrapper {
-    padding: 32px;
+    max-width: 768px;
     width: 768px;
+    padding: 32px;
   }
+
   .article,
   .header,
   .title {
-    width: 704px;
+    max-width: 704px;
+  }
+
+  .image {
+    max-width: 704px;
+    aspect-ratio: 704 / 469;
   }
 
   .headerGroup {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 48px;
   }
 
@@ -123,10 +136,10 @@
 /* Desktop (1440px+) */
 @media (min-width: 1440px) {
   .wrapper {
-    padding: 48px 64px;
+    max-width: 1440px;
     width: 1440px;
+    padding: 48px 64px;
     background-color: var(--foreground);
-
     display: flex;
     flex-direction: row;
     align-items: flex-start;
@@ -135,12 +148,11 @@
 
   .article,
   .header,
-  .title {
-    width: 1312px;
+  .title,
+  .image {
+    max-width: 1312px;
   }
-  .header {
-    padding-top: 48px;
-  }
+
   .headerGroup {
     margin-top: 32px;
   }
@@ -148,6 +160,7 @@
   .title {
     font-size: 56px;
   }
+
   .text,
   .accent {
     font-size: 18px;
@@ -167,6 +180,7 @@
   .textArticleGroup {
     display: flex;
     gap: 24px;
+    padding-top: 48px;
   }
   .textArticle {
     font-size: 18px;
@@ -178,13 +192,56 @@
     display: inline-block;
     width: 418px;
   }
+
   .titleSaveContainer {
     font-size: 26px;
   }
+
   .textSaveContainer {
     font-size: 18px;
   }
+
   .buttonSaveContainer {
     font-size: 18px;
+  }
+}
+
+/* --- УПРАВЛЕНИЕ КОЛИЧЕСТВОМ КАРТОЧЕК ЧЕРЕЗ ВНЕШНЮЮ ОБЕРТКУ для секции PopularStories --- */
+.popularWrapper [class*='articleItem'] {
+  display: block;
+}
+
+.popularWrapper [class*='articleItem']:nth-child(n + 3) {
+  display: none !important;
+}
+
+.popularWrapper [class*='seeMore'] {
+  display: none !important;
+}
+
+.popularWrapper [class*='articleList'] {
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* Tablet (768px - 1439px: показываем 4) */
+@media (min-width: 768px) {
+  .popularWrapper [class*='articleItem']:nth-child(-n + 4) {
+    display: block !important;
+  }
+
+  .popularWrapper [class*='articleItem']:nth-child(n + 5) {
+    display: none !important;
+  }
+}
+
+/* Desktop (1440px+: показываем 3) */
+@media (min-width: 1440px) {
+  .popularWrapper [class*='articleItem']:nth-child(4) {
+    display: none !important;
+  }
+
+  .popularWrapper [class*='articleItem']:nth-child(-n + 3) {
+    display: block !important;
   }
 }

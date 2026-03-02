@@ -30,7 +30,7 @@ const StoryPage = ({ story }: StoryPageProps) => {
       </header>
 
       <Image
-        src={story.img || '/img/placeholder.png'}
+        src={story.img || '/img/placeholder-image.jpg'}
         alt={story.title}
         width={800}
         height={500}

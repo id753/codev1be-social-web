@@ -1,3 +1,5 @@
+'use client';
+
 import css from './PopularStoriesSection.module.css';
 import { Story } from '@/types/story';
 import { useAuth } from '@/hooks/useAuth';
@@ -8,6 +10,11 @@ import { isAxiosError } from 'axios';
 import toast from 'react-hot-toast';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useQueryClient } from '@tanstack/react-query';
+
+type Props = {
+  story: Story;
+};
 
 type IconProps = {
   id: string;
@@ -24,27 +31,37 @@ function Icon({ id, className }: IconProps) {
   );
 }
 
-export const StoryItem = ({ story }: { story: Story }) => {
+export const StoryItem = ({ story }: Props) => {
+  const queryClient = useQueryClient();
+
   const { isAuthenticated, user } = useAuth();
   const { open } = useAuthModalStore();
 
   const initialFavoriteCount = story.favoriteCount ?? 0;
 
   const [favoritesCount, setFavoritesCount] = useState(initialFavoriteCount);
+
   const [isSaved, setIsSaved] = useState(false);
+
   const [isLoading, setIsLoading] = useState(false);
 
+  /**
+   * sync favorites count
+   */
   useEffect(() => {
     setFavoritesCount(initialFavoriteCount);
   }, [initialFavoriteCount]);
 
+  /**
+   * sync saved state from currentUser
+   */
   useEffect(() => {
     if (!isAuthenticated || !user) {
       setIsSaved(false);
       return;
     }
 
-    setIsSaved(user.favoriteStories?.includes(story._id));
+    setIsSaved(user.savedArticles?.includes(story._id) ?? false);
   }, [user, isAuthenticated, story._id]);
 
   const onToggleSave = async () => {
@@ -60,13 +77,20 @@ export const StoryItem = ({ story }: { story: Story }) => {
     try {
       if (isSaved) {
         await removeFavouriteStory(story._id);
-        setIsSaved(false);
+
         setFavoritesCount((prev) => Math.max(prev - 1, 0));
       } else {
         await addToFavouriteStory(story._id);
-        setIsSaved(true);
+
         setFavoritesCount((prev) => prev + 1);
       }
+
+      /**
+       * оновлює user
+       */
+      await queryClient.invalidateQueries({
+        queryKey: ['currentUser'],
+      });
     } catch (error) {
       if (isAxiosError(error)) {
         toast.error(
@@ -116,6 +140,7 @@ export const StoryItem = ({ story }: { story: Story }) => {
                 {story.date}
                 {' • '}
                 {favoritesCount}
+
                 <Icon id="savesmall" className={css.icon} />
               </p>
             </div>

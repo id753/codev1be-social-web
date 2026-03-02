@@ -53,7 +53,7 @@ export default function TravellersStoriesItem({
       return;
     }
 
-    setIsSaved(currentUser.favoriteStories.includes(story._id));
+    setIsSaved(currentUser.savedArticles.includes(story._id));
   }, [currentUser, isAuthenticated, story._id]);
 
   const onToggleSave = async () => {
