@@ -1,0 +1,202 @@
+/* =====================
+   SECTION
+===================== */
+
+.section {
+    background-color: var(--color-scheme-2-background);
+}
+
+.sectionPadding {
+    padding-top: 32px;
+}
+
+.inner {
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    padding: 0px 20px;
+}
+
+/* =====================
+   HEADER (mobile)
+===================== */
+
+.header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 24px;
+    margin-bottom: 32px;
+}
+
+.avatar {
+    width: 199px;
+    height: 199px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.info {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.name {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 120%;
+    color: var(--color-scheme-1-text);
+    padding-bottom: 8px;
+}
+
+.description {
+    color: var(--color-scheme-2-text);
+
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* =====================
+   TITLE
+===================== */
+
+.title {
+    text-align: left;
+    padding-bottom: 40px;
+    font-size: 28px;
+    line-height: 120%;
+    letter-spacing: -0.01em;
+    color: var(--color-scheme-1-text);
+}
+
+/* =====================
+   Базові стилі для кнопок
+======================== */
+.buttonBase {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 48px;
+}
+
+/* ====================
+   Кнопка "Переглянути всіх - Показати ще"
+==================== */
+.viewAllBtn {
+    width: 100%;
+    margin-top: 24px;
+    padding: 6px 12px;
+    background-color: var(--color-royal-blue);
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 150%;
+    color: var(--color-white);
+    border: 1px solid var(--color-royal-blue);
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background-color 300ms ease-in-out, color 300ms ease-in-out;
+}
+
+.viewAllBtn:hover,
+.viewAllBtn:focus {
+    background-color: var(--color-royal-blue-lighter);
+    color: var(--color-scheme-2-text);
+}
+
+.viewAllBtn:active {
+    background-color: var(--color-royal-blue-light);
+    color: var(--color-scheme-2-text);
+}
+
+.viewAllBtn:disabled {
+    background-color: var(--color-royal-blue);
+    color: var(--color-white);
+    opacity: 0.3;
+}
+
+/* =====================
+   TABLET (768px+)
+===================== */
+
+@media (min-width: 768px) {
+
+    .inner {
+        padding: 0px 32px;
+    }
+
+    .header {
+        flex-direction: row;
+        align-items: center;
+        gap: 24px;
+    }
+     
+    .info {
+        flex: 1;
+        min-width: 0;
+        flex-direction: column;
+        justify-content: center;
+        text-align: left;
+    }
+
+    .name {
+        font-size: 20px;
+        line-height: 130%;
+        padding-bottom: 0;
+    }
+
+
+    .title {
+        font-size: 44px;
+    }
+
+    .viewAllBtn {
+        max-width: 125px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+/* =====================
+   DESKTOP (1440px+)
+===================== */
+
+@media (min-width: 1440px) {
+
+    .sectionPadding {
+        padding-top: 72px;
+    }
+
+    .inner {
+        padding: 0px 64px;
+    }
+
+    .header {
+        margin-bottom: 48px;
+    }
+
+    .info {
+        flex: 0 0 auto;
+        width: 367px;
+    }
+
+    .name {
+        font-size: 32px;
+        line-height: 130%;
+    }
+
+    .description {
+        font-size: 18px;
+    }
+
+    .title {
+        font-size: 52px;
+    }
+}
