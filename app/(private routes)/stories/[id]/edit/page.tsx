@@ -1,10 +1,6 @@
 import { fetchStoryById } from '@/lib/api/clientApi';
 import AddStoryForm from '@/components/AddStoryForm/AddStoryForm';
-<<<<<<< HEAD
 import css from './EditStoryPage.module.css';
-=======
-import css from '@/app/(private routes)/stories/create/CreateStory.module.css';
->>>>>>> origin/main
 
 interface Props {
   params: { id: string };
@@ -19,15 +15,9 @@ const EditStoryPage = async ({ params }: Props) => {
     _id: story._id,
     img: story.img || null,
     title: story.title || '',
-<<<<<<< HEAD
     category: story.category?._id || '',
-=======
-    category: story.category._id || '',
->>>>>>> origin/main
     article: story.article || '',
   };
-
-  
 
   return (
     <section>
