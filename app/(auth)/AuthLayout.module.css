@@ -1,19 +1,12 @@
 .layout {
-  min-height: 100svh;
   display: flex;
   flex-direction: column;
-  background: var(--color-white);
+  min-height: 100svh;
+  background-color: var(--color-white);
 }
 
 .header {
   padding: 16px 0;
-}
-
-.main {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .footer {

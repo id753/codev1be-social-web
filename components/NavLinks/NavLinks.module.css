@@ -24,3 +24,7 @@
 .navLinkLight:focus-visible {
   border-color: var(--color-white);
 }
+
+.navLinkLight:active {
+  background: var(--color-neutral-dark);
+}

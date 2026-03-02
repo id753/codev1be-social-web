@@ -15,7 +15,9 @@ export default function AuthLayout({
           <Logo />
         </div>
       </header>
-      <main className={css.main}>{children}</main>
+      <main className={css.main}>
+        <div className="container">{children}</div>
+      </main>
       <footer className={css.footer}>
         <div className="container">
           <p className={css.copyright}>© {year} Подорожники</p>
