@@ -35,124 +35,138 @@ export default function RegisterPage() {
 
   return (
     <div className={styles.authWrapper}>
-      <div className={styles.content}>
-        <div className={styles.tabs}>
-          <Link
-            href="/register"
-            className={`${styles.tab} ${styles.tabActive}`}
-          >
-            Реєстрація
-          </Link>
-          <Link href="/login" className={styles.tab}>
-            Вхід
-          </Link>
-        </div>
-
-        <h1 className={styles.title}>Реєстрація</h1>
-        <p className={styles.subtitle}>
-          Раді вас бачити у спільноті мандрівників!
-        </p>
-
-        <Formik<RegisterValues>
-          initialValues={{ name: '', email: '', password: '' }}
-          validationSchema={RegisterSchema}
-          onSubmit={async (values, helpers) => {
-            helpers.setStatus(null);
-
-            try {
-              // ✅ напрямую на backend
-              await api.post('/api/auth/register', values);
-
-              router.push('/');
-              router.refresh();
-            } catch (err: unknown) {
-              let msg = 'Server error';
-
-              if (axios.isAxiosError(err)) {
-                const data = err.response?.data as ApiErrorData | undefined;
-                msg = data?.message ?? err.message ?? msg;
-              }
-
-              helpers.setStatus(msg);
-            } finally {
-              helpers.setSubmitting(false);
-            }
-          }}
-        >
-          {({
-            values,
-            errors,
-            touched,
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            isSubmitting,
-            status,
-          }) => (
-            <form className={styles.form} onSubmit={handleSubmit}>
-              <label className={styles.field}>
-                <span className={styles.label}>Ім’я та Прізвище*</span>
-                <input
-                  className={styles.input}
-                  name="name"
-                  type="text"
-                  placeholder="Ваше ім'я та прізвище"
-                  value={values.name}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  disabled={isSubmitting}
-                />
-                {touched.name && errors.name && (
-                  <span className={styles.errorText}>{errors.name}</span>
-                )}
-              </label>
-
-              <label className={styles.field}>
-                <span className={styles.label}>Пошта*</span>
-                <input
-                  className={styles.input}
-                  name="email"
-                  type="email"
-                  placeholder="hello@podorozhnyky.ua"
-                  value={values.email}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  disabled={isSubmitting}
-                />
-                {touched.email && errors.email && (
-                  <span className={styles.errorText}>{errors.email}</span>
-                )}
-              </label>
-
-              <label className={styles.field}>
-                <span className={styles.label}>Пароль*</span>
-                <input
-                  className={styles.input}
-                  name="password"
-                  type="password"
-                  placeholder="********"
-                  value={values.password}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  disabled={isSubmitting}
-                />
-                {touched.password && errors.password && (
-                  <span className={styles.errorText}>{errors.password}</span>
-                )}
-              </label>
-
-              {status && <div className={styles.errorText}>{status}</div>}
-
-              <button
-                className={styles.button}
-                type="submit"
-                disabled={isSubmitting}
+      <div className={styles.authCard}>
+        <div className={styles.inner}>
+          <div className={styles.content}>
+            <div className={styles.tabs}>
+              <Link
+                href="/register"
+                className={`${styles.tab} ${styles.tabActive}`}
               >
-                {isSubmitting ? '...' : 'Зареєструватись'}
-              </button>
-            </form>
-          )}
-        </Formik>
+                Реєстрація
+              </Link>
+              <Link href="/login" className={styles.tab}>
+                Вхід
+              </Link>
+            </div>
+
+            <h1 className={styles.title}>Реєстрація</h1>
+            <p className={styles.subtitle}>
+              Раді вас бачити у спільноті мандрівників!
+            </p>
+
+            <Formik<RegisterValues>
+              initialValues={{ name: '', email: '', password: '' }}
+              validationSchema={RegisterSchema}
+              onSubmit={async (values, helpers) => {
+                helpers.setStatus(null);
+
+                try {
+                  // ✅ напрямую на backend
+                  await nextServer.post('/api/auth/register', values);
+
+                  router.push('/');
+                  router.refresh();
+                } catch (err: unknown) {
+                  let msg = 'Server error';
+
+                  if (axios.isAxiosError(err)) {
+                    const data = err.response?.data as ApiErrorData | undefined;
+                    msg = data?.message ?? err.message ?? msg;
+                  }
+
+                  helpers.setStatus(msg);
+                } finally {
+                  helpers.setSubmitting(false);
+                }
+              }}
+            >
+              {({
+                values,
+                errors,
+                touched,
+                handleChange,
+                handleBlur,
+                handleSubmit,
+                isSubmitting,
+                status,
+              }) => (
+                <form className={styles.form} onSubmit={handleSubmit}>
+                  <label className={styles.field}>
+                    <span className={styles.label}>Ім’я та Прізвище*</span>
+                    <input
+                      className={styles.input}
+                      name="name"
+                      type="text"
+                      placeholder="Ваше ім'я та прізвище"
+                      value={values.name}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      disabled={isSubmitting}
+                    />
+                    {touched.name && errors.name && (
+                      <span style={{ color: 'crimson', fontSize: 12 }}>
+                        {errors.name}
+                      </span>
+                    )}
+                  </label>
+
+                  <label className={styles.field}>
+                    <span className={styles.label}>Пошта*</span>
+                    <input
+                      className={styles.input}
+                      name="email"
+                      type="email"
+                      placeholder="hello@podorozhnyky.ua"
+                      value={values.email}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      disabled={isSubmitting}
+                    />
+                    {touched.email && errors.email && (
+                      <span style={{ color: 'crimson', fontSize: 12 }}>
+                        {errors.email}
+                      </span>
+                    )}
+                  </label>
+
+                  <label className={styles.field}>
+                    <span className={styles.label}>Пароль*</span>
+                    <input
+                      className={styles.input}
+                      name="password"
+                      type="password"
+                      placeholder="********"
+                      value={values.password}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      disabled={isSubmitting}
+                    />
+                    {touched.password && errors.password && (
+                      <span style={{ color: 'crimson', fontSize: 12 }}>
+                        {errors.password}
+                      </span>
+                    )}
+                  </label>
+
+                  {status && (
+                    <div style={{ color: 'crimson', fontSize: 12 }}>
+                      {status}
+                    </div>
+                  )}
+
+                  <button
+                    className={styles.button}
+                    type="submit"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? '...' : 'Зареєструватись'}
+                  </button>
+                </form>
+              )}
+            </Formik>
+          </div>
+        </div>
       </div>
     </div>
   );
