@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
-import { api } from '@/lib/api/auth';
+import nextServer from '@/lib/api/api';
 
 const RegisterSchema = Yup.object({
   name: Yup.string().trim().max(32, 'Max 32').required("Обов'язково"),
@@ -63,7 +63,7 @@ export default function RegisterPage() {
 
                 try {
                   // ✅ напрямую на backend
-                  await api.post('/api/auth/register', values);
+                  await nextServer.post('/api/auth/register', values);
 
                   router.push('/');
                   router.refresh();

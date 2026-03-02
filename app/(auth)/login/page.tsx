@@ -7,7 +7,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
-import { api } from '@/lib/api/auth';
+import nextServer from '@/lib/api/api';
 
 const LoginSchema = Yup.object({
   email: Yup.string().email('Невірний email').required("Обов'язково"),
@@ -51,7 +51,7 @@ export default function LoginPage() {
                 helpers.setStatus(null);
 
                 try {
-                  const response = await api.post('/auth/login', values);
+                  const response = await nextServer.post('/auth/login', values);
 
                   if (response.status === 200 || response.status === 201) {
                     // Очисти кеш пользователя
