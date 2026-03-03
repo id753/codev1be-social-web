@@ -1,7 +1,25 @@
 import { fetchStoryById } from '@/lib/api/clientApi';
 import AddStoryForm from '@/components/AddStoryForm/AddStoryForm';
-import css from '@/app/(private routes)/stories/create/CreateStory.module.css';
+import { Metadata } from 'next';
+import css from './EditStoryPage.module.css';
 
+export const metadata: Metadata = {
+  title: 'Edit a new story',
+  description: 'Edit a new story',
+  openGraph: {
+    title: 'Edit a new story',
+    description: 'Edit a new story.',
+    url: 'https://codev1be-social-api.onrender.com/stories/action/create',
+    images: [
+      {
+        url: 'https://ac.goit.global/fullstack/react/og-meta.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Podorozhnyky',
+      },
+    ],
+  },
+};
 interface Props {
   params: { id: string };
 }
@@ -15,14 +33,12 @@ const EditStoryPage = async ({ params }: Props) => {
     _id: story._id,
     img: story.img || null,
     title: story.title || '',
-    category: story.category._id || '',
+    category: story.category?._id || '',
     article: story.article || '',
   };
 
-  
-
   return (
-    <section>
+    <section className={css.createStorySection}>
       <div className="container">
         <h1 className={css.createStoryTitle}>Редагувати історію</h1>
         <AddStoryForm initialValues={initialValues} />

@@ -58,23 +58,18 @@ export interface CreateStoryParams {
   favoriteCount: number;
   img?: string;
 }
-export interface UpdateStoryParams {
-  title?: string;
-  article?: string;
-  category?: string;
-  img?: string;
-}
 
 export interface CreateStoryData {
   title: string;
   article: string;
-  category: string;
+  category: string; // ObjectId string
   img?: File | string | null;
 }
+
 export interface UpdateStoryData {
-  title: string;
-  article: string;
-  category: string;
+  title?: string;
+  article?: string;
+  category?: string; // ObjectId string
   img?: File | string | null;
 }
 

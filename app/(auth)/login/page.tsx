@@ -8,6 +8,7 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
 import nextServer from '@/lib/api/api';
+import { useAuthStore } from '@/lib/store/authStore'; 
 
 const LoginSchema = Yup.object({
   email: Yup.string().email('Невірний email').required("Обов'язково"),
@@ -26,6 +27,7 @@ type ApiErrorData = {
 export default function LoginPage() {
   const router = useRouter();
   const queryClient = useQueryClient();
+  const { setUser } = useAuthStore(); 
 
   return (
     <div className={styles.authWrapper}>
@@ -36,7 +38,10 @@ export default function LoginPage() {
               <Link href="/register" className={styles.tab}>
                 Реєстрація
               </Link>
-              <Link href="/login" className={`${styles.tab} ${styles.tabActive}`}>
+              <Link
+                href="/login"
+                className={`${styles.tab} ${styles.tabActive}`}
+              >
                 Вхід
               </Link>
             </div>
@@ -54,13 +59,13 @@ export default function LoginPage() {
                   const response = await nextServer.post('/auth/login', values);
 
                   if (response.status === 200 || response.status === 201) {
-                    // Очисти кеш пользователя
-                    await queryClient.invalidateQueries({ 
-                      queryKey: ['currentUser'] 
+                    setUser(response.data.user);
+
+                    await queryClient.invalidateQueries({
+                      queryKey: ['currentUser'],
                     });
 
                     router.push('/');
-                    router.refresh();
                   }
                 } catch (err: unknown) {
                   let msg = 'Invalid credentials';
@@ -102,7 +107,9 @@ export default function LoginPage() {
                       disabled={isSubmitting}
                     />
                     {touched.email && errors.email && (
-                      <span style={{ color: 'crimson', fontSize: 12 }}>{errors.email}</span>
+                      <span style={{ color: 'crimson', fontSize: 12 }}>
+                        {errors.email}
+                      </span>
                     )}
                   </label>
 
@@ -119,13 +126,23 @@ export default function LoginPage() {
                       disabled={isSubmitting}
                     />
                     {touched.password && errors.password && (
-                      <span style={{ color: 'crimson', fontSize: 12 }}>{errors.password}</span>
+                      <span style={{ color: 'crimson', fontSize: 12 }}>
+                        {errors.password}
+                      </span>
                     )}
                   </label>
 
-                  {status && <div style={{ color: 'crimson', fontSize: 12 }}>{status}</div>}
+                  {status && (
+                    <div style={{ color: 'crimson', fontSize: 12 }}>
+                      {status}
+                    </div>
+                  )}
 
-                  <button className={styles.button} type="submit" disabled={isSubmitting}>
+                  <button
+                    className={styles.button}
+                    type="submit"
+                    disabled={isSubmitting}
+                  >
                     {isSubmitting ? '...' : 'Увійти'}
                   </button>
                 </form>

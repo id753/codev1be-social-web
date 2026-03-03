@@ -199,7 +199,7 @@ export default function StoriesPage() {
         />
 
         {hasMoreStories && (
-          <button onClick={handleLoadMore}>Показати ще</button>
+          <button className={styles.loadMoreBtn} onClick={handleLoadMore}>Показати ще</button>
         )}
       </div>
     </section>

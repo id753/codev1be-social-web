@@ -15,7 +15,6 @@ interface AuthNavigationProps {
 
 function AuthNavigation({ isDark }: AuthNavigationProps) {
   const router = useRouter();
-
   const { isAuthenticated, user, clearIsAuthenticated } = useAuthStore();
 
   const handleLogout = async () => {
@@ -25,24 +24,21 @@ function AuthNavigation({ isDark }: AuthNavigationProps) {
       console.error('Logout failed:', error);
     } finally {
       clearIsAuthenticated();
-
       router.push('/');
-
-      router.refresh();
     }
   };
 
   return (
     <div className={css.wrapper}>
-      {isAuthenticated && user ? (
+      {isAuthenticated ? (
         <div className={css.userContainer}>
           <PublishButton isDark={isDark} />
           <div className={isDark ? css.userBlockDark : css.userBlockLight}>
             <Link href="/profile" className={css.profileLink}>
               <div className={css.avatarCircle}>
-                {user.avatarUrl ? (
+                {user?.avatarUrl ? (
                   <Image
-                    src={user.avatarUrl || '/svg/avatar.svg'}
+                    src={user.avatarUrl}
                     alt="Avatar"
                     width={32}
                     height={32}
@@ -50,11 +46,14 @@ function AuthNavigation({ isDark }: AuthNavigationProps) {
                     unoptimized
                   />
                 ) : (
-                  (user.name || 'U').charAt(0).toUpperCase()
+                  (user?.name || 'U').charAt(0).toUpperCase()
                 )}
               </div>
-              <span className={css.userName}>{user.name || user.email}</span>
+              <span className={css.userName}>
+                {user?.name || user?.email || ''}
+              </span>
             </Link>
+
             <button
               onClick={handleLogout}
               className={css.logoutButton}
