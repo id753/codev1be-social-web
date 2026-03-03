@@ -5,22 +5,35 @@ import NavLinks from "@/components/NavLinks/NavLinks";
 import AuthNavigation from "@/components/AuthNavigation/AuthNavigation";
 import css from "./Header.module.css";
 
-import { usePathname } from "next/navigation";
-import React, { useState } from "react";
+import { usePathname } from 'next/navigation';
+import React, { useState, useEffect } from 'react';
 
-import MobileMenu from "../MobileMenu/MobileMenu";
-import { useAuthStore } from "@/lib/store/authStore";
+import MobileMenu from '../MobileMenu/MobileMenu';
+import { useAuthStore } from '@/lib/store/authStore';
+import { getMe } from '@/lib/api/clientApi';
 
 function Header() {
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, user, setUser } = useAuthStore();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const pathname = usePathname();
-  const isHomePage = pathname === "/";
+  const isHomePage = pathname === '/';
 
-  const headerClasses = `${css.header} ${
-    isHomePage ? css.homeHeader : css.pageHeader
-  }`;
+  const headerClasses = `${css.header}
+     ${isHomePage ? css.homeHeader : css.pageHeader}`;
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      getMe()
+        .then((user) => {
+          if (user) {
+            setUser(user);
+          }
+        })
+        .catch(() => {
+        });
+    }
+  }, [isAuthenticated, setUser]);
 
   return (
     <>

@@ -6,27 +6,12 @@ export function middleware(req: NextRequest) {
 
   const { pathname } = req.nextUrl;
 
-  // user is authenticated if at least one token exists
   const isAuthenticated = Boolean(accessToken || refreshToken);
 
-  // PRIVATE ROUTES
-  const isPrivateRoute =
-    // pathname.startsWith('/profile') ||
-    pathname === '/stories/create' ||
-    pathname === '/edit' ||
-    (pathname.startsWith('/stories/') && pathname.endsWith('/edit'));
-
   // GUEST ONLY ROUTES
-  const isGuestRoute =
-    pathname === '/login' ||
-    pathname === '/register';
+  const isGuestRoute = pathname === '/login' || pathname === '/register';
 
-  // guest → private → login
-  if (!isAuthenticated && isPrivateRoute) {
-    return NextResponse.redirect(new URL('/login', req.url));
-  }
-
-  // auth → guest pages → home
+  // Якщо авторизований — не пускати на login/register
   if (isAuthenticated && isGuestRoute) {
     return NextResponse.redirect(new URL('/', req.url));
   }
@@ -37,7 +22,7 @@ export function middleware(req: NextRequest) {
 export const config = {
   matcher: [
     '/profile',
-    // '/stories/create',
+    '/stories/create',
     '/stories/:storyId/edit',
     '/edit',
     '/login',

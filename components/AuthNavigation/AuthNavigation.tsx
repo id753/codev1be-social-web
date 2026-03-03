@@ -42,46 +42,37 @@ export default function AuthNavigation({ isDark }: AuthNavigationProps) {
     } finally {
       clearIsAuthenticated();
       router.push('/');
-      router.refresh();
     }
   };
 
   return (
     <div className={css.wrapper}>
-      {showAuthUI && viewUser ? (
+      {isAuthenticated ? (
         <div className={css.userContainer}>
           <PublishButton isDark={isDark} />
 
           <div className={isDark ? css.userBlockDark : css.userBlockLight}>
             {/* Аватар + Імʼя */}
             <Link href="/profile" className={css.profileLink}>
-              <span className={css.avatarCircle} aria-hidden="true">
-  {viewUser.avatarUrl ? (
-    <Image
-      src={viewUser.avatarUrl}
-      alt=""
-      width={32}
-      height={32}
-      className={css.avatarImg}
-      unoptimized
-    />
-  ) : (
-    <Image
-      src="/svg/avatar.svg"
-      alt=""
-      width={16}
-      height={16}
-      className={css.avatarIcon}
-    />
-  )}
-</span>
-
+              <div className={css.avatarCircle}>
+                {user?.avatarUrl ? (
+                  <Image
+                    src={user.avatarUrl}
+                    alt="Avatar"
+                    width={32}
+                    height={32}
+                    className={css.avatarImg}
+                    unoptimized
+                  />
+                ) : (
+                  (user?.name || 'U').charAt(0).toUpperCase()
+                )}
+              </div>
               <span className={css.userName}>
-                {viewUser.name || viewUser.email}
+                {user?.name || user?.email || ''}
               </span>
             </Link>
 
-            {/* Logout (разделитель — через border-left в CSS) */}
             <button
               onClick={handleLogout}
               className={css.logoutButton}

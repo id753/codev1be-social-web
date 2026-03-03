@@ -2,7 +2,7 @@
 import React from 'react';
 import StoryPage from '@/components/StoryPage/StoryPage';
 import { getSingleStory } from '@/lib/api/story';
-import css from '../../../components/StoryPage/StoryPage.module.css';
+import css from '@/components/StoryPage/StoryPage.module.css';
 import PopularStoriesSection from '@/components/PopularStoriesSection/PopularStoriesSection';
 
 type Props = {

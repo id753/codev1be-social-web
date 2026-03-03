@@ -168,7 +168,7 @@
 .filterDropdownOptionActive {
   background: var(--color-neutral-lightest);
 }
-  
+
 .filterDropdownOptionActive:hover {
   background: var(--color-neutral-lightest);
 }
@@ -246,12 +246,20 @@
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: background-color 300ms ease-in-out;
+  transition:
+    color 300ms ease-in-out,
+    background-color 300ms ease-in-out;
   min-width: 200px;
 }
 
-.loadMoreBtn:hover {
-  background-color: var(--color-royal-blue-dark);
+.loadMoreBtn:hover,
+.loadMoreBtn:focus {
+  color: var(--color-scheme-2-text);
+  background-color: var(--color-royal-blue-lighter);
+}
+
+.loadMoreBtn:active {
+  background-color: var(--color-royal-blue-light);
 }
 
 /* Tablet (768px) */
