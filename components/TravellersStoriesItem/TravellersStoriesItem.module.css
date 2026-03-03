@@ -216,14 +216,14 @@
 }
 
 .bookmarkBtnActive {
-  background: var(--color-royal-blue);
+  background: var(--color-royal-blue-darker);
   border-color: var(--color-royal-blue);
   color: var(--color-white);
 }
 
 .bookmarkBtnActive:hover {
-  background: var(--color-royal-blue-darker);
-  border-color: var(--color-royal-blue-darker);
+  background: var(--color-royal-blue);
+  border-color: var(--color-royal-blue);
   color: var(--color-white);
 }
 
