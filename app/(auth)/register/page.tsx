@@ -3,10 +3,12 @@
 import Link from 'next/link';
 import styles from './register.module.css';
 import { useRouter } from 'next/navigation';
+import { useQueryClient } from '@tanstack/react-query';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
 import nextServer from '@/lib/api/api';
+import { useAuthStore } from '@/lib/store/authStore';
 
 const RegisterSchema = Yup.object({
   name: Yup.string().trim().max(32, 'Max 32').required("Обов'язково"),
@@ -32,6 +34,8 @@ type ApiErrorData = {
 
 export default function RegisterPage() {
   const router = useRouter();
+  const queryClient = useQueryClient();
+  const { setUser } = useAuthStore(); 
 
   return (
     <div className={styles.authWrapper}>
@@ -62,11 +66,20 @@ export default function RegisterPage() {
                 helpers.setStatus(null);
 
                 try {
-                  // ✅ напрямую на backend
-                  await nextServer.post('/auth/register', values);
+                  const response = await nextServer.post(
+                    '/auth/register',
+                    values,
+                  );
 
-                  router.push('/');
-                  router.refresh();
+                  if (response.status === 200 || response.status === 201) {
+                    setUser(response.data.user); 
+
+                    await queryClient.invalidateQueries({
+                      queryKey: ['currentUser'],
+                    });
+
+                    router.push('/');
+                  }
                 } catch (err: unknown) {
                   let msg = 'Server error';
 
