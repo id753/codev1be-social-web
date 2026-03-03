@@ -1,7 +1,7 @@
 .footer {
   padding-top: 48px;
   padding-bottom: 48px;
-  background-color: #e8eeff;
+  background-color: var(--color-royal-blue-lighter);
   width: 100%;
 }
 

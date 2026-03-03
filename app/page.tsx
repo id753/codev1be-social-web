@@ -1,7 +1,7 @@
 'use client';
 import './globals.css';
 import { useState } from "react";
-import Hero from '@/components/Hero/Hero';
+import Hero from '@/components/Hero/Hero'
 import About from '@/components/About/About';
 import PopularStoriesSection from '@/components/PopularStoriesSection/PopularStoriesSection';
 import OurTravellers from "@/components/OurTravellers/OurTravellers";

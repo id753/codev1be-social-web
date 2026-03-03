@@ -1,7 +1,7 @@
 import { fetchStoryById } from '@/lib/api/clientApi';
 import AddStoryForm from '@/components/AddStoryForm/AddStoryForm';
+import css from '@/app/(main)/(private routes)/stories/create/CreateStory.module.css';
 import { Metadata } from 'next';
-import css from './EditStoryPage.module.css';
 
 export const metadata: Metadata = {
   title: 'Edit a new story',

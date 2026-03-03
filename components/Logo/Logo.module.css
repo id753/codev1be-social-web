@@ -1,17 +1,17 @@
 .logoLink {
-  text-decoration: none;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 156px;
   height: 40px;
+  flex-shrink: 0;
 }
 
 .logoWrapper {
   display: flex;
   align-items: center;
   flex-direction: row;
-  gap: 3px;
+  gap: 3.3px;
 }
 
 .logoIcon {
