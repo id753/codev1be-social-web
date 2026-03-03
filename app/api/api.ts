@@ -2,13 +2,13 @@ import axios, {
   AxiosError,
   AxiosInstance,
   InternalAxiosRequestConfig,
+  AxiosRequestHeaders,
 } from 'axios';
 
 import { cookies } from 'next/headers';
 
 const serverApi: AxiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
-
   withCredentials: true,
 });
 
@@ -22,7 +22,9 @@ serverApi.interceptors.request.use(
       .join('; ');
 
     if (cookieHeader) {
-      config.headers.set('Cookie', cookieHeader);
+      const headers = config.headers as AxiosRequestHeaders;
+      headers['Cookie'] = cookieHeader;
+      config.headers = headers;
     }
 
     return config;

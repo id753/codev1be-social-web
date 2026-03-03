@@ -16,6 +16,7 @@ interface TravellersStoriesItemProps {
   user?: StoryCardUser;
   categoryName: string;
   priority?: boolean;
+  mode?: 'default' | 'own';   // 👈 ДОБАВИЛИ
 }
 
 export default function TravellersStoriesItem({
@@ -23,11 +24,13 @@ export default function TravellersStoriesItem({
   user,
   categoryName,
   priority = false,
+  mode = 'default',          // 👈 ПО УМОЛЧАНИЮ
 }: TravellersStoriesItemProps) {
   const { isAuthenticated, user: currentUser } = useAuth();
   const { open } = useAuthModalStore();
 
   const articleText = story.article || story.description || '';
+
   const formattedDate = new Date(story.date).toLocaleDateString('uk-UA', {
     day: 'numeric',
     month: 'short',
@@ -104,16 +107,13 @@ export default function TravellersStoriesItem({
           className={styles.image}
           sizes="(max-width: 767px) 100vw, (max-width: 1439px) 50vw, 33vw"
           priority={priority}
-          fetchPriority={priority ? 'high' : 'auto'}
         />
       </div>
 
       <div className={styles.content}>
         <div className={styles.contentCard}>
           <span className={styles.tag}>{categoryName}</span>
-
           <h3 className={styles.title}>{story.title}</h3>
-
           <p className={styles.description}>
             {articleText.substring(0, 80) || 'Опис відсутній'}...
           </p>
@@ -129,17 +129,13 @@ export default function TravellersStoriesItem({
                 className={styles.avatarImage}
                 sizes="48px"
               />
-            ) : (
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <path
-                  d="M12 12C14.21 12 16 10.21 16 8C16 5.79 14.21 4 12 4C9.79 4 8 5.79 8 8C8 10.21 9.79 12 12 12ZM12 14C9.33 14 4 15.34 4 18V20H20V18C20 15.34 14.67 14 12 14Z"
-                  fill="#D1D5DB"
-                />
-              </svg>
-            )}
+            ) : null}
           </div>
+
           <div className={styles.authorInfo}>
-            <span className={styles.authorName}>{user?.name || 'Автор'}</span>
+            <span className={styles.authorName}>
+              {user?.name || 'Автор'}
+            </span>
             <div className={styles.time}>
               <span className={styles.date}>{formattedDate}</span>
               <span className={styles.divider}>•</span>
@@ -162,6 +158,7 @@ export default function TravellersStoriesItem({
           </div>
         </div>
 
+        {/* 🔥 ACTIONS */}
         <div className={styles.actions}>
           <Link href={`/stories/${story._id}`} className={styles.readBtn}>
             Переглянути статтю

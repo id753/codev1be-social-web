@@ -1,10 +1,9 @@
-'use client';
+"use client";
 
-import Logo from '@/components/Logo/Logo';
-import NavLinks from '@/components/NavLinks/NavLinks';
-import AuthNavigation from '@/components/AuthNavigation/AuthNavigation';
-import PublishButton from '@/components/PublishButton/PublishButton';
-import css from './Header.module.css';
+import Logo from "@/components/Logo/Logo";
+import NavLinks from "@/components/NavLinks/NavLinks";
+import AuthNavigation from "@/components/AuthNavigation/AuthNavigation";
+import css from "./Header.module.css";
 
 import { usePathname } from 'next/navigation';
 import React, { useState, useEffect } from 'react';
@@ -50,7 +49,6 @@ function Header() {
           </nav>
 
           <div className={css.mobileActions}>
-            {isAuthenticated && <PublishButton isDark={isHomePage} />}
             <button
               className={css.menuBtn}
               onClick={() => setIsMenuOpen(!isMenuOpen)}

@@ -211,6 +211,46 @@
 
 /* Desktop */
 @media (min-width: 1440px) {
+
+.profileLayout {
+  display: flex;
+  align-items: center;
+  gap: 48px;
+
+  width: 100%;
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 0;
+}
+
+.profileAvatar { width: 200px; height: 200px; flex: 0 0 200px; }
+
+/* ✅ 367px как в Figma */
+.profileText {
+  width: 367px;
+  flex: 0 0 367px;
+}
+
+/* ✅ Typography: Inter 700, lh 130%, ls -1% */
+.profileName {
+  font-weight: 700;
+  font-size: 28px;        /* если у тебя по макету меньше/больше — поменяй */
+  line-height: 130%;
+  letter-spacing: -0.01em;
+  margin: 0 0 12px;
+  color: var(--color-scheme-2-text);
+}
+
+/* описание без clamp */
+.profileDescription {
+  font-size: 18px;
+  line-height: 150%;
+  margin: 0;
+  color: var(--color-scheme-2-text);
+  display: block;
+  overflow: visible;
+}
   .sectionPadding {
     padding-top: 72px;
   }

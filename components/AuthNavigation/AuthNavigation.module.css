@@ -3,6 +3,10 @@
   align-items: center;
 }
 
+/* =========================
+   Guest (Вхід / Реєстрація)
+========================= */
+
 .authButtons {
   display: flex;
   align-items: center;
@@ -22,7 +26,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: row;
   transition:
     background-color 0.3s ease-in-out,
     border-color 0.3s ease-in-out,
@@ -53,13 +56,11 @@
   padding: 4px 10px;
   border: 1px solid var(--color-white);
   border-radius: 8px;
-  max-width: 113px;
   height: 35px;
   white-space: nowrap;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: row;
   transition:
     background-color 0.3s ease-in-out,
     border-color 0.3s ease-in-out,
@@ -87,87 +88,99 @@
 
 .loginLinkLight:active {
   background-color: var(--color-royal-blue-darker);
-  border-color: var(--opacity-transparent);
 }
 
-.authButtons .registerBtnLight:hover,
-.authButtons .registerBtnLight:focus {
-  background-color: var(--color-royal-blue-lighter);
-  border-color: var(--color-royal-blue);
-  color: var(--color-scheme-2-text);
+/* =========================
+   Logged user (Publish + Avatar + Імʼя + Logout)
+========================= */
+
+.userContainer {
+  display: flex;
+  align-items: center;
+  gap: 20px; /* расстояние между Publish и блоком пользователя */
 }
 
-.authButtons .registerBtnLight:active {
-  background-color: var(--color-royal-blue-light);
+.userBlockDark,
+.userBlockLight {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: currentColor;
 }
 
-.logoutButton {
-  background: none;
-  border: none;
-  border-left: 1px solid var(--opacity-white-20);
-  height: 29px;
-  padding: 8px 8px;
+/* Аватар + Імʼя */
+
+.profileLink {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: currentColor;
+}
+
+.profileLink:hover {
+  opacity: 0.9;
+}
+
+/* Кружок аватара */
+.avatarCircle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--opacity-neutral-darkest-5);
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
+}
+
+.userBlockDark .avatarCircle {
+  background-color: var(--opacity-white-10);
+}
+
+/* Фото */
+.avatarImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Иконка если нет фото */
+.avatarIcon {
+  width: 16px;
+  height: 16px;
+  opacity: 0.6;
+}
+
+.userName {
+  font-size: 16px;
+  font-weight: 400;
+  white-space: nowrap;
   color: currentColor;
+}
+
+/* Logout кнопка (БЕЗ линии!) */
+.logoutButton {
+  background: none;
+  border: none;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: currentColor;
+  transition: opacity 0.2s ease;
 }
 
 .logoutButton:hover {
   opacity: 0.7;
 }
 
-/* Стилі для залогіненого юзера */
-.userContainer {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.profileLink {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: currentColor;
-}
-
-.avatarCircle {
-  width: 32px;
-  height: 32px;
-  background-color: transparent;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  border: none;
-}
-
-.avatarImg {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.userName {
-  font-size: 16px;
-  font-weight: 400;
-  color: currentColor;
-  margin-right: 8px;
-}
-
 .userBlockDark {
-  display: flex;
-  align-items: center;
   color: var(--color-white);
 }
 
 .userBlockLight {
-  display: flex;
-  align-items: center;
   color: var(--color-neutral-darkest);
-}
-
-.userBlockLight .logoutButton {
-  border-left-color: var(--opacity-neutral-darkest-15);
 }

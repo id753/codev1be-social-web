@@ -1,0 +1,39 @@
+.box {
+  margin-top: 48px;
+
+  max-width: 560px;        /* карточка шире текста */
+  padding: 48px;
+
+  border-radius: 24px;
+  background: #e9efff;
+}
+
+/* 🔥 ограничиваем ширину текста */
+.text {
+  max-width: 469px;
+
+  /* 🔥 убираем дефолтные margin у <p> */
+   margin: 0 0 32px 0;
+
+  font-size: 26px;
+  font-weight: 700;
+  
+}
+
+/* кнопка */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 48px;
+  padding: 0 24px;
+
+  border-radius: 12px;
+  background: var(--color-royal-blue);
+  color: #fff;
+  text-decoration: none;
+
+  font-weight: 600;
+  font-size: 16px;
+}
