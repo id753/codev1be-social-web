@@ -5,10 +5,13 @@ import { Story } from '@/types/story';
 
 // ================= AUTH =================
 
-export async function getMeServer(): Promise<User> {
-  const response = await serverApi.get<User>('/users/me');
-
-  return response.data;
+export async function getMeServer(): Promise<User | null> {
+  try {
+    const response = await serverApi.get<User>('/users/me');
+    return response.data;
+  } catch (error) {
+    return null;
+  }
 }
 
 export async function logoutServer(): Promise<void> {

@@ -1,35 +1,34 @@
-import type { ReactNode } from "react";
-import PageToggle from "@/components/PageToggle/PageToggle";
-import TravellerInfo from "@/components/OurTravellers/TravellerInfo";
+import { ReactNode } from 'react';
+import { redirect } from 'next/navigation';
 
-import styles from "./ProfileLayout.module.css";
+import PageToggle from '@/components/PageToggle/PageToggle';
+import TravellerInfo from '@/components/OurTravellers/TravellerInfo';
+import { getMeServer } from '@/lib/api/serverApi';
 
-export default function ProfileLayout({ children }: { children: ReactNode }) {
-  // временная заглушка traveller (потом заменим на реальные данные)
-  const traveller = {
-    _id: "me",
-    name: "Назар Ткаченко",
-    avatarUrl: "/public/svg/avatar.svg",
-    description:
-      "Прихильник культурного туризму. Пишу про історичні локації, архітектуру та цікаві місцеві традиції.",
-  };
+import styles from './ProfileLayout.module.css';
+
+export default async function ProfileLayout({
+  children,
+}: {
+  children: ReactNode;
+}) {
+  const traveller = await getMeServer();
+
+  if (!traveller) {
+    redirect('/login');
+  }
 
   return (
     <section className={styles.page}>
       <div className={styles.container}>
-        
-
-        {/* верхний блок профиля */}
         <div className={styles.headerBlock}>
-  <TravellerInfo traveller={traveller as any} variant="profile" />
-</div>
+          <TravellerInfo traveller={traveller} variant="profile" />
+        </div>
 
-        {/* tabs */}
         <div className={styles.tabs}>
           <PageToggle />
         </div>
 
-        {/* контент вкладки */}
         <div className={styles.content}>{children}</div>
       </div>
     </section>
