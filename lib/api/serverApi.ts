@@ -1,17 +1,19 @@
+import { cookies } from 'next/headers';
 import serverApi from '@/app/api/api';
-
+import nextServer from './api';
 import { User } from '@/types/user';
 import { Story } from '@/types/story';
 
 // ================= AUTH =================
+export async function getMeServer() {
+  const cookieStore = await cookies();
 
-export async function getMeServer(): Promise<User | null> {
-  try {
-    const response = await serverApi.get<User>('/users/me');
-    return response.data;
-  } catch {
-    return null;
-  }
+  const { data } = await serverApi.get<User>('/api/users/me', {
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
+  });
+  return data;
 }
 
 export async function logoutServer(): Promise<void> {

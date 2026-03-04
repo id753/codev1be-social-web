@@ -1,11 +1,24 @@
+import type { Metadata } from 'next';
+import Image from 'next/image';
+import Link from 'next/link';
+import css from './ProfilePage.module.css';
+import { getMeServer } from '@/lib/api/serverApi';
+import TravellerInfo from '@/components/OurTravellers/TravellerInfo';
+export const metadata: Metadata = {
+  title: 'Profile ',
+  description: 'User profile page',
+};
 
-export default async function ProfilePage() {
+const ProfilePage = async () => {
+  const user = await getMeServer();
 
   return (
-    <main className="section">
+    <section>
       <div className="container">
-      <h1>Hello world</h1>
+        <TravellerInfo traveller={user} variant="profile" />
       </div>
-    </main>
+    </section>
   );
-}
+};
+
+export default ProfilePage;

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import serverApi from '@/app/api/api';
 
 export async function GET() {
-  const res = await serverApi.get('/users/me');
+  const res = await serverApi.get('/api/users/me');
 
   return NextResponse.json(res.data);
 }
