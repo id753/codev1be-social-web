@@ -1,16 +1,14 @@
 'use client';
 
 import css from './Footer.module.css';
-import { useAuthStore } from '@/lib/store/authStore';
+import Link from 'next/link';
 import Logo from '@/components/Logo/Logo';
-import NavLinks from '@/components/NavLinks/NavLinks';
-import { socials } from '@/components/Footer/socials';
+import { useAuthStore } from '@/lib/store/authStore';
 
 const SPRITE = '/svg/icons.svg';
 
 type IconProps = {
   id: string;
-  className?: string;
 };
 
 function Icon({ id }: IconProps) {
@@ -21,9 +19,27 @@ function Icon({ id }: IconProps) {
   );
 }
 
-function Footer() {
+const socials = [
+  { id: 'Facebook1', href: 'https://facebook.com', label: 'Facebook' },
+  { id: 'Instagram', href: 'https://instagram.com', label: 'Instagram' },
+  { id: 'X', href: 'https://x.com', label: 'X' },
+  { id: 'Youtube', href: 'https://youtube.com', label: 'YouTube' },
+];
+
+const navBase = [
+  { href: '/', label: 'Головна' },
+  { href: '/stories', label: 'Історії' },
+  { href: '/travelers', label: 'Мандрівники' },
+];
+
+const navProfile = { href: '/profile', label: 'Профіль' };
+
+export default function Footer() {
   const year = new Date().getFullYear();
-  const { isAuthenticated } = useAuthStore();
+
+  const isLoggedIn = useAuthStore((state) => state.isAuthenticated);
+
+  const nav = isLoggedIn ? [...navBase, navProfile] : navBase;
 
   return (
     <footer className={css.footer}>
@@ -47,9 +63,15 @@ function Footer() {
             ))}
           </ul>
 
-          <nav className={css.nav} aria-label="Навігація футера">
-            <ul className={css.navList}>
-              <NavLinks showProfile={isAuthenticated} />
+          <nav aria-label="Навігація футера">
+            <ul className={css.nav}>
+              {nav.map(({ href, label }) => (
+                <li key={href}>
+                  <Link href={href} className={css.navLink}>
+                    {label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </nav>
         </div>
@@ -61,5 +83,3 @@ function Footer() {
     </footer>
   );
 }
-
-export default Footer;

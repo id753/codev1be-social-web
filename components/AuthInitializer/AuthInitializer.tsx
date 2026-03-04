@@ -8,7 +8,7 @@ export default function AuthInitializer() {
 
   useEffect(() => {
     checkAuth();
-  }, [checkAuth]);
+  }, []);
 
   return null;
 }
