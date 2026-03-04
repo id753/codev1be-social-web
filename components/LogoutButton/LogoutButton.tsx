@@ -1,6 +1,6 @@
 'use client';
 
-import { api } from '@/lib/api/auth';
+import nextServer from '@/lib/api/api';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -11,7 +11,7 @@ export function LogoutButton() {
   const onLogout = async () => {
     setLoading(true);
     try {
-      await api.post('/auth/logout');
+      await nextServer.post('/auth/logout');
       router.push('/login');
       router.refresh();
     } finally {
