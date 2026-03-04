@@ -7,6 +7,7 @@ import * as Yup from 'yup';
 import axios from 'axios';
 import styles from './AuthForm.module.css';
 import { useAuthStore } from '@/lib/store/authStore';
+import nextServer from '@/lib/api/api';
 
 // --- ТИПИ ---
 interface AuthValues {
@@ -89,11 +90,17 @@ export default function AuthForm({ type }: AuthFormProps) {
   ) => {
     helpers.setStatus(null);
 
-    const endpoint = isRegister ? '/api/auth/register' : '/api/auth/login';
+    const endpoint = isRegister ? '/auth/register' : '/auth/login';
 
     try {
       // 1. Отримуємо дані користувача з відповіді бекенду
-      const { data } = await axios.post(endpoint, values);
+      const { data } = await nextServer.post(endpoint, values);
+
+      //     І це саме те, що треба, бо nextServer має:
+      // -	withCredentials: true
+      // -	refresh interceptor
+      // -	retry queue
+      // тобто тепер кукі надсилаються
 
       // 2. ОЦЕЙ РЯДОК ВИПРАВЛЯЄ ТВОЮ ПРОБЛЕМУ:
       // Ми записуємо юзера в глобальний стан Zustand ПЕРЕД редиректом.
