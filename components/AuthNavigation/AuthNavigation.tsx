@@ -1,38 +1,22 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-
 import PublishButton from '@/components/PublishButton/PublishButton';
+import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/lib/store/authStore';
 import { logout } from '@/lib/api/clientApi';
 
 import css from './AuthNavigation.module.css';
-import type { User } from '@/types/user';
+import Image from 'next/image';
 
 interface AuthNavigationProps {
   isDark?: boolean;
 }
 
-export default function AuthNavigation({ isDark }: AuthNavigationProps) {
+function AuthNavigation({ isDark }: AuthNavigationProps) {
   const router = useRouter();
+
   const { isAuthenticated, user, clearIsAuthenticated } = useAuthStore();
-
-  // 🔧 Временно для верстки (потом поставишь false)
-  const FORCE_AUTH_UI = false;
-
-  const mockUser: User = {
-    _id: 'mock',
-    name: 'Імʼя',
-    email: 'test@mail.com',
-    avatarUrl: '',
-    articlesAmount: 0,
-    savedArticles: [],
-  };
-
-  const showAuthUI = FORCE_AUTH_UI || (isAuthenticated && !!user);
-  const viewUser: User | null = FORCE_AUTH_UI ? mockUser : user;
 
   const handleLogout = async () => {
     try {
@@ -41,23 +25,24 @@ export default function AuthNavigation({ isDark }: AuthNavigationProps) {
       console.error('Logout failed:', error);
     } finally {
       clearIsAuthenticated();
+
       router.push('/');
+
+      router.refresh();
     }
   };
 
   return (
     <div className={css.wrapper}>
-      {isAuthenticated ? (
+      {isAuthenticated && user ? (
         <div className={css.userContainer}>
           <PublishButton isDark={isDark} />
-
           <div className={isDark ? css.userBlockDark : css.userBlockLight}>
-            {/* Аватар + Імʼя */}
             <Link href="/profile" className={css.profileLink}>
               <div className={css.avatarCircle}>
-                {user?.avatarUrl ? (
+                {user.avatarUrl ? (
                   <Image
-                    src={user.avatarUrl}
+                    src={user.avatarUrl || '/svg/avatar.svg'}
                     alt="Avatar"
                     width={32}
                     height={32}
@@ -65,21 +50,17 @@ export default function AuthNavigation({ isDark }: AuthNavigationProps) {
                     unoptimized
                   />
                 ) : (
-                  (user?.name || 'U').charAt(0).toUpperCase()
+                  (user.name || 'U').charAt(0).toUpperCase()
                 )}
               </div>
-              <span className={css.userName}>
-                {user?.name || user?.email || ''}
-              </span>
+              <span className={css.userName}>{user.name || user.email}</span>
             </Link>
-
             <button
               onClick={handleLogout}
               className={css.logoutButton}
               aria-label="Вийти"
-              type="button"
             >
-              <svg width="24" height="24" aria-hidden="true">
+              <svg width="24" height="24">
                 <use href="/svg/icons.svg#logout" />
               </svg>
             </button>
@@ -96,7 +77,6 @@ export default function AuthNavigation({ isDark }: AuthNavigationProps) {
           >
             Вхід
           </Link>
-
           <Link
             href="/register"
             prefetch={false}
@@ -113,3 +93,5 @@ export default function AuthNavigation({ isDark }: AuthNavigationProps) {
     </div>
   );
 }
+
+export default AuthNavigation;

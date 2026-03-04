@@ -2,14 +2,9 @@ import type { Metadata } from 'next';
 import { Nunito_Sans, Inter } from 'next/font/google';
 import './globals.css';
 
-import Header from '@/components/Header/Header';
-import Footer from '@/components/Footer/Footer';
 import QueryProvider from './providers/QueryProvider';
 import ToastProvider from '@/components/ToastProvider/ToastProvider';
 import AuthNavModal from '@/components/AuthNavModal/AuthNavModal';
-
-import { getMeServer } from '@/lib/api/serverApi'; 
-import { User } from '@/types/user';
 
 const nunito = Nunito_Sans({
   variable: '--font-nunito-sans',
@@ -68,34 +63,16 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
-  let user: User | null = null;
-
-  try {
-    user = await getMeServer();
-  } catch {
-    user = null;
-  }
-
+}) {
   return (
     <html lang="uk">
-      <body
-        className={`
-     ${nunito.variable}
-     ${inter.variable}
-    `}
-      >
+      <body className={`${nunito.variable} ${inter.variable}`}>
         <QueryProvider>
-          <Header />
-          {/* <Header user={user} /> */}
-          <main>{children}</main>
-           {/* <Footer user={user} /> */}
-          <Footer />
-          
+          {children}
           <ToastProvider />
           <AuthNavModal />
           <div id="modal-root" />

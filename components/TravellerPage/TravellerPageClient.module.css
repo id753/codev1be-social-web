@@ -15,7 +15,6 @@
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    padding: 0px 20px;
 }
 
 /* =====================
@@ -127,10 +126,6 @@
 ===================== */
 
 @media (min-width: 768px) {
-
-    .inner {
-        padding: 0px 32px;
-    }
 
     .header {
         flex-direction: row;

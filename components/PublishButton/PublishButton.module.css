@@ -49,12 +49,10 @@
   .publishBtnLight:hover,
   .publishBtnLight:focus {
     background-color: var(--color-royal-blue-lighter);
-    border-color: var(--color-royal-blue);
     color: var(--color-scheme-2-text);
   }
 
   .publishBtnLight:active {
-    background-color: var(--color-royal-blue-light);
     border-color: var(--color-royal-blue-light);
   }
 }

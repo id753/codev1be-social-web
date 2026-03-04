@@ -1,0 +1,20 @@
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+  background-color: var(--color-white);
+}
+
+.header {
+  padding: 16px 0;
+}
+
+.footer {
+  text-align: center;
+}
+
+.copyright {
+  color: currentColor;
+  padding: 27px 0;
+  font-size: 16px;
+}
