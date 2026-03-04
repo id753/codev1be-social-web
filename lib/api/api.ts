@@ -12,7 +12,6 @@ const nextServer = axios.create({
 });
 
 let isRefreshing = false;
-
 let failedQueue: FailedRequest[] = [];
 
 const processQueue = (error?: unknown) => {
@@ -35,7 +34,14 @@ nextServer.interceptors.response.use(
       _retry?: boolean;
     };
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    const status = error.response?.status;
+    const url = originalRequest.url || '';
+
+    if (
+      status === 401 &&
+      !originalRequest._retry &&
+      !url.includes('/auth/refresh')
+    ) {
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           failedQueue.push({
@@ -47,16 +53,13 @@ nextServer.interceptors.response.use(
       }
 
       originalRequest._retry = true;
-
       isRefreshing = true;
 
       try {
         await axios.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/auth/refresh`,
+          `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
           {},
-          {
-            withCredentials: true,
-          },
+          { withCredentials: true },
         );
 
         processQueue();

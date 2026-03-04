@@ -8,7 +8,7 @@ import axios, {
 import { cookies } from 'next/headers';
 
 const serverApi: AxiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: process.env.NEXT_PUBLIC_API_URL + '/api',
   withCredentials: true,
 });
 

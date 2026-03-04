@@ -9,7 +9,7 @@ export async function getMeServer(): Promise<User | null> {
   try {
     const response = await serverApi.get<User>('/users/me');
     return response.data;
-  } catch (error) {
+  } catch {
     return null;
   }
 }
@@ -75,9 +75,8 @@ export async function fetchPopularStoriesServer() {
   return response.data;
 }
 
-export async function fetchStoryByIdServer(id: string): Promise<Story> {
+export async function fetchStoryByIdServer(id: string) {
   const response = await serverApi.get(`/stories/${id}`);
-
   return response.data;
 }
 
