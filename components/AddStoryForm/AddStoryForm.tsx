@@ -312,7 +312,10 @@ export default function AddStoryForm({ initialValues }: AddStoryFormProps) {
                 <button
                   type="button"
                   className={`${css.formButton} ${css.buttonCancel}`}
-                  onClick={() => router.back()}
+                  onClick={() => {
+                    if (!isEditing) clearDraft();
+                    router.back();
+                  }}
                 >
                   Відмінити
                 </button>
