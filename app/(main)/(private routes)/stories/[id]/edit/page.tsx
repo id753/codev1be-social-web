@@ -1,13 +1,32 @@
 import { fetchStoryById } from '@/lib/api/clientApi';
 import AddStoryForm from '@/components/AddStoryForm/AddStoryForm';
 import css from '@/app/(main)/(private routes)/stories/create/CreateStory.module.css';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Edit a new story',
+  description: 'Edit a new story',
+  openGraph: {
+    title: 'Edit a new story',
+    description: 'Edit a new story.',
+    url: 'https://codev1be-social-api.onrender.com/stories/action/create',
+    images: [
+      {
+        url: 'https://ac.goit.global/fullstack/react/og-meta.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Podorozhnyky',
+      },
+    ],
+  },
+};
 
 interface Props {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 const EditStoryPage = async ({ params }: Props) => {
-  const { id } = params;
+  const { id } = await params;
 
   const story = await fetchStoryById(id);
 

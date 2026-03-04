@@ -12,6 +12,7 @@ const nextServer = axios.create({
 });
 
 let isRefreshing = false;
+let refreshFailed = false;
 
 let failedQueue: FailedRequest[] = [];
 
@@ -35,7 +36,21 @@ nextServer.interceptors.response.use(
       _retry?: boolean;
     };
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    const status = error.response?.status;
+    const url = originalRequest.url || '';
+
+    // якщо refresh вже падав — більше не пробуємо
+    if (refreshFailed) {
+      return Promise.reject(error);
+    }
+
+    // refresh робимо тільки для реальних protected запитів
+    if (
+      status === 401 &&
+      !originalRequest._retry &&
+      !url.includes('/auth/refresh') &&
+      !url.includes('/users/me')
+    ) {
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           failedQueue.push({
@@ -47,12 +62,11 @@ nextServer.interceptors.response.use(
       }
 
       originalRequest._retry = true;
-
       isRefreshing = true;
 
       try {
         await axios.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/auth/refresh`,
+          `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
           {},
           {
             withCredentials: true,
@@ -64,6 +78,8 @@ nextServer.interceptors.response.use(
         return nextServer(originalRequest);
       } catch (refreshError) {
         processQueue(refreshError);
+
+        refreshFailed = true;
 
         return Promise.reject(refreshError);
       } finally {
