@@ -73,6 +73,8 @@
   margin: 16px 0 32px;
   display: block;
   background-color: var(--color-neutral-light);
+  object-fit: cover;
+  object-position: center;
 }
 
 .textArticle {
@@ -100,6 +102,8 @@
   .image {
     max-width: 704px;
     aspect-ratio: 704 / 469;
+    object-fit: cover;
+    object-position: center;
   }
 
   .headerGroup {
@@ -175,6 +179,8 @@
     width: 1312px;
     height: 874px;
     margin-bottom: 48px;
+    object-fit: cover;
+    object-position: center;
   }
 
   .textArticleGroup {
