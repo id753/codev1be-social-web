@@ -56,18 +56,13 @@ nextServer.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        await axios.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
-          {},
-          { withCredentials: true },
-        );
+        await nextServer.post('/auth/refresh');
 
         processQueue();
 
         return nextServer(originalRequest);
       } catch (refreshError) {
         processQueue(refreshError);
-
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;
