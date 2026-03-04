@@ -1,15 +1,14 @@
 'use client';
+
 import css from './Footer.module.css';
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
-import nextServer from '@/lib/api/api';
 import Logo from '@/components/Logo/Logo';
+import { useAuthStore } from '@/lib/store/authStore';
 
 const SPRITE = '/svg/icons.svg';
 
 type IconProps = {
   id: string;
-  className?: string;
 };
 
 function Icon({ id }: IconProps) {
@@ -37,20 +36,8 @@ const navProfile = { href: '/profile', label: 'Профіль' };
 
 export default function Footer() {
   const year = new Date().getFullYear();
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await nextServer.get('/api/users/me');
-        setIsLoggedIn(res.status === 200);
-      } catch {
-        setIsLoggedIn(false);
-      }
-    };
-
-    fetchUser();
-  }, []);
+  const isLoggedIn = useAuthStore((state) => state.isAuthenticated);
 
   const nav = isLoggedIn ? [...navBase, navProfile] : navBase;
 
