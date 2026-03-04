@@ -212,6 +212,7 @@
   .logo {
     margin-right: 0;
     flex: 1;
+    justify-content: flex-start;
   }
 
   .nav {
