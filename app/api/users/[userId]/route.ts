@@ -3,11 +3,11 @@ import serverApi from '@/app/api/api';
 
 export async function GET(
   req: NextRequest,
-  context: { params: Promise<{ userId: string }> },
+  context: { params: Promise<{ travellerId: string }> },
 ) {
-  const { userId } = await context.params;
+  const { travellerId } = await context.params;
 
-  const res = await serverApi.get(`/users/${userId}`);
+  const res = await serverApi.get(`/users/${travellerId}`);
 
   return NextResponse.json(res.data);
 }

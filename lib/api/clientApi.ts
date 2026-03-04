@@ -64,6 +64,11 @@ export async function fetchUsers(
   return response.data;
 }
 
+export async function fetchUserById(userId: string): Promise<User> {
+  const response = await nextServer.get(`/users/${userId}`);
+  return response.data;
+}
+
 interface UpdateMeProps {
   name: string;
   article: string;
@@ -96,9 +101,10 @@ export interface StoriesHttpResponse {
 }
 
 export interface FetchStoriesProps {
-  page: number;
-  perPage: number;
+  page?: number;
+  perPage?: number;
   category?: string;
+  ownerId?: string
 }
 
 export async function fetchStories(
