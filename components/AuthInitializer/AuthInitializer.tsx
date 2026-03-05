@@ -1,17 +1,3 @@
-// 'use client';
-
-// import { useEffect } from 'react';
-// import { useAuthStore } from '@/lib/store/authStore';
-
-// export default function AuthInitializer() {
-//   const checkAuth = useAuthStore((s) => s.checkAuth);
-
-//   useEffect(() => {
-//     checkAuth();
-//   }, [checkAuth]);
-
-//   return null;
-// }
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -30,9 +16,31 @@ export default function AuthInitializer({ children, initialUser }: Props) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    checkAuth();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    const checkAuth = async () => {
+      try {
+        if (initialUser) {
+          setUser(initialUser);
+        } else {
+          const user = await getMe();
+          if (user) {
+            setUser(user);
+          } else {
+            clearIsAuthenticated();
+          }
+        }
+      } catch {
+        clearIsAuthenticated();
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  return null;
+    checkAuth();
+  }, [initialUser, setUser, clearIsAuthenticated]);
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  return <>{children}</>;
 }
