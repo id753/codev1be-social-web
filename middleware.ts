@@ -11,7 +11,6 @@ export function middleware(req: NextRequest) {
   // GUEST ONLY ROUTES
   const isGuestRoute = pathname === '/login' || pathname === '/register';
 
-  // Якщо авторизований — не пускати на login/register
   if (isAuthenticated && isGuestRoute) {
     return NextResponse.redirect(new URL('/', req.url));
   }

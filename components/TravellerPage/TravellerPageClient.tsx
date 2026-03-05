@@ -102,7 +102,9 @@ export default function TravellerPageClient({ traveller }: Props) {
     [traveller._id]: {
       _id: traveller._id,
       name: traveller.name,
-      avatarUrl: traveller.avatarUrl ?? '/default-avatar.png',
+      avatarUrl:
+        traveller.avatarUrl ??
+        'https://ac.goit.global/fullstack/react/default-avatar.jpg',
     },
   };
 
@@ -113,7 +115,10 @@ export default function TravellerPageClient({ traveller }: Props) {
       <div className={css.header}>
         <div className={css.avatar}>
           <Image
-            src={traveller.avatarUrl ?? '/default-avatar.png'}
+            src={
+              traveller.avatarUrl ??
+              'https://ac.goit.global/fullstack/react/default-avatar.jpg'
+            }
             alt={traveller.name}
             width={199}
             height={199}

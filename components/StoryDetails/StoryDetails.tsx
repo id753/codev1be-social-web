@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import css from './StoryDetails.module.css';
 import { ConfirmModal } from '../ConfirmModal/ConfirmModal';
 import { useRouter } from 'next/navigation';
-import { addToFavouriteStory, getMe } from '@/lib/api/clientApi';
+import { addToFavouriteStory } from '@/lib/api/clientApi';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 
@@ -17,26 +17,26 @@ const StoryDetails = ({ storyId }: StoryDetailsProps) => {
 
   const [saved, setSaved] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [isChecking, setIsChecking] = useState(true);
+  const [isChecking] = useState(true);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
-  useEffect(() => {
-    const checkSaved = async () => {
-      try {
-        const user = await getMe();
+  // useEffect(() => {
+  //   const checkSaved = async () => {
+  //     try {
+  //       const user = await getMe();
 
-        const isAlreadySaved = user.savedArticles?.includes(storyId) ?? false;
+  //       const isAlreadySaved = user.savedArticles?.includes(storyId) ?? false;
 
-        setSaved(isAlreadySaved);
-      } catch {
-        setSaved(false);
-      } finally {
-        setIsChecking(false);
-      }
-    };
+  //       setSaved(isAlreadySaved);
+  //     } catch {
+  //       setSaved(false);
+  //     } finally {
+  //       setIsChecking(false);
+  //     }
+  //   };
 
-    checkSaved();
-  }, [storyId]);
+  //   checkSaved();
+  // }, [storyId]);
 
   const handleSave = async () => {
     if (saved || isLoading) return;

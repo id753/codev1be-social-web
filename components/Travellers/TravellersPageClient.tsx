@@ -10,7 +10,7 @@ import TravellersList from '@/components/OurTravellers/TravellersList';
 import Skeleton from '@/components/Skeleton/Skeleton';
 import css from '@/components/OurTravellers/OurTravellers.module.css';
 
-let iziToast: typeof import("izitoast").default | null = null;
+let iziToast: typeof import('izitoast').default | null = null;
 
 export default function TravellersPageClient() {
   const [travellers, setTravellers] = useState<User[]>([]);
@@ -23,11 +23,10 @@ export default function TravellersPageClient() {
   const prevLengthRef = useRef(0);
 
   useEffect(() => {
-    import("izitoast").then((mod) => {
+    import('izitoast').then((mod) => {
       iziToast = mod.default;
     });
   }, []);
-
 
   // Визначення початкової кількості карток по ширині вікна
   useEffect(() => {

@@ -3,7 +3,6 @@ import type { NextConfig } from 'next';
 const nextConfig: NextConfig = {
   reactCompiler: true,
   images: {
-    domains: ['ftp.goit.study', 'placehold.co', 'res.cloudinary.com'],
     remotePatterns: [
       {
         protocol: 'https',
@@ -11,14 +10,24 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       },
       {
-        protocol: "https",
-        hostname: "ac.goit.global",
-        pathname: "/**",
+        protocol: 'https',
+        hostname: 'ac.goit.global',
+        pathname: '/**',
       },
       {
-        protocol: "https",
-        hostname: "res.cloudinary.com",
-        pathname: "/**",
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'placehold.co',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'ftp.goit.study',
+        pathname: '/**',
       },
     ],
   },

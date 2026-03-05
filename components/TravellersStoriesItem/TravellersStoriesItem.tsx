@@ -16,7 +16,7 @@ interface TravellersStoriesItemProps {
   user?: StoryCardUser;
   categoryName: string;
   priority?: boolean;
-  mode?: 'default' | 'own';   // 👈 ДОБАВИЛИ
+  mode?: 'default' | 'own'; // 👈 ДОБАВИЛИ
 }
 
 export default function TravellersStoriesItem({
@@ -24,7 +24,7 @@ export default function TravellersStoriesItem({
   user,
   categoryName,
   priority = false,
-  mode = 'default',          // 👈 ПО УМОЛЧАНИЮ
+  mode = 'default', // 👈 ПО УМОЛЧАНИЮ
 }: TravellersStoriesItemProps) {
   const { isAuthenticated, user: currentUser } = useAuth();
   const { open } = useAuthModalStore();
@@ -133,9 +133,7 @@ export default function TravellersStoriesItem({
           </div>
 
           <div className={styles.authorInfo}>
-            <span className={styles.authorName}>
-              {user?.name || 'Автор'}
-            </span>
+            <span className={styles.authorName}>{user?.name || 'Автор'}</span>
             <div className={styles.time}>
               <span className={styles.date}>{formattedDate}</span>
               <span className={styles.divider}>•</span>

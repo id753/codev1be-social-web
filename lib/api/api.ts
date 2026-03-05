@@ -6,12 +6,22 @@ type FailedRequest = {
   config: InternalAxiosRequestConfig;
 };
 
-const nextServer = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL + '/api',
+// const nextServer = axios.create({
+//   baseURL: process.env.NEXT_PUBLIC_API_URL + '/api',
+//   withCredentials: true,
+// });
+
+// @/lib/api/api.ts
+const isBrowser = typeof window !== 'undefined';
+
+export const nextServer = axios.create({
+  baseURL: isBrowser ? '/api' : process.env.NEXT_PUBLIC_API_URL + '/api',
   withCredentials: true,
 });
 
 let isRefreshing = false;
+let refreshFailed = false;
+
 let failedQueue: FailedRequest[] = [];
 
 const processQueue = (error?: unknown) => {
@@ -37,10 +47,15 @@ nextServer.interceptors.response.use(
     const status = error.response?.status;
     const url = originalRequest.url || '';
 
+    if (refreshFailed) {
+      return Promise.reject(error);
+    }
+
     if (
       status === 401 &&
       !originalRequest._retry &&
-      !url.includes('/auth/refresh')
+      !url.includes('/auth/refresh') &&
+      !url.includes('/users/me')
     ) {
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
@@ -56,13 +71,23 @@ nextServer.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        await nextServer.post('/auth/refresh');
+        // await axios.post(
+        //   `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
+        //   {},
+        //   {
+        //     withCredentials: true,
+        //   },
+        // );
+        await axios.post('/api/auth/refresh', {}, { withCredentials: true });
 
         processQueue();
 
         return nextServer(originalRequest);
       } catch (refreshError) {
         processQueue(refreshError);
+
+        refreshFailed = true;
+
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;

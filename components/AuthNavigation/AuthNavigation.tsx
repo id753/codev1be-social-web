@@ -27,7 +27,6 @@ function AuthNavigation({ isDark }: AuthNavigationProps) {
       clearIsAuthenticated();
 
       router.push('/');
-
       router.refresh();
     }
   };

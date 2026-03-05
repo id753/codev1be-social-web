@@ -38,10 +38,15 @@ export async function logout(): Promise<void> {
   await nextServer.post('/auth/logout');
 }
 
-export const getMe = async (): Promise<User> => {
-  const { data } = await nextServer.get('/users/me'); // Або /auth/me залежно від бекенду
-  return data;
-};
+// export const getMe = async (): Promise<User> => {
+//   const { data } = await nextServer.get('/users/me'); // Або /auth/me залежно від бекенду
+//   return data;
+// };
+
+export async function getMe(): Promise<User> {
+  const response = await nextServer.get('/auth/refresh');
+  return response.data;
+}
 
 /* ---------------- USERS ---------------- */
 
@@ -110,7 +115,7 @@ export interface FetchStoriesProps {
   page?: number;
   perPage?: number;
   category?: string;
-  ownerId?: string
+  ownerId?: string;
 }
 
 export async function fetchStories(

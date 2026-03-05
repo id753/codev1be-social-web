@@ -6,6 +6,7 @@ import QueryProvider from './providers/QueryProvider';
 import ToastProvider from '@/components/ToastProvider/ToastProvider';
 import AuthNavModal from '@/components/AuthNavModal/AuthNavModal';
 import AuthInitializer from '@/components/AuthInitializer/AuthInitializer';
+import { getMeServer } from '@/lib/api/serverApi';
 
 const nunito = Nunito_Sans({
   variable: '--font-nunito-sans',
@@ -64,22 +65,24 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const user = await getMeServer();
+
   return (
     <html lang="uk">
       <body className={`${nunito.variable} ${inter.variable}`}>
         <QueryProvider>
-          <AuthInitializer />
+          <AuthInitializer initialUser={user}>
+            {children}
 
-          {children}
-          
-          <ToastProvider />
-          <AuthNavModal />
-          <div id="modal-root" />
+            <ToastProvider />
+            <AuthNavModal />
+            <div id="modal-root" />
+          </AuthInitializer>
         </QueryProvider>
       </body>
     </html>

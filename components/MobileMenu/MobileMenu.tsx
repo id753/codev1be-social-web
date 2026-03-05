@@ -16,8 +16,6 @@ interface MobileMenuProps {
 function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
   const { isAuthenticated, user, clearIsAuthenticated } = useAuthStore();
 
-  if (!isOpen) return null;
-
   const handleLogout = async () => {
     try {
       await logout();
@@ -29,8 +27,10 @@ function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
     }
   };
 
+  const menuClasses = `${css.menu} ${isOpen ? css.isOpen : ''}`;
+
   return (
-    <div className={css.menu}>
+    <div className={menuClasses}>
       <div className="container">
         <div className={css.header}>
           <Logo />
@@ -54,7 +54,11 @@ function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
         <div className={css.footer}>
           {isAuthenticated ? (
             <div className={css.loggedInContent}>
-              <Link href="/stories/create" className={css.blueButton}>
+              <Link
+                href="/stories/create"
+                className={css.blueButton}
+                onClick={onClose}
+              >
                 Опублікувати історію
               </Link>
               <div className={css.userRow}>
