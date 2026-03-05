@@ -7,6 +7,8 @@ import { useRouter } from 'next/navigation';
 import { addToFavouriteStory } from '@/lib/api/clientApi';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
+import { useEffect } from 'react';
+import { getMe } from '@/lib/api/clientApi';
 
 type StoryDetailsProps = {
   storyId: string;
@@ -17,26 +19,26 @@ const StoryDetails = ({ storyId }: StoryDetailsProps) => {
 
   const [saved, setSaved] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [isChecking] = useState(true);
+  const [isChecking, setIsChecking] = useState(true);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
-  // useEffect(() => {
-  //   const checkSaved = async () => {
-  //     try {
-  //       const user = await getMe();
+  useEffect(() => {
+    const checkSaved = async () => {
+      try {
+        const user = await getMe();
 
-  //       const isAlreadySaved = user.savedArticles?.includes(storyId) ?? false;
+        const isAlreadySaved = user.savedArticles?.includes(storyId) ?? false;
 
-  //       setSaved(isAlreadySaved);
-  //     } catch {
-  //       setSaved(false);
-  //     } finally {
-  //       setIsChecking(false);
-  //     }
-  //   };
+        setSaved(isAlreadySaved);
+      } catch {
+        setSaved(false);
+      } finally {
+        setIsChecking(false);
+      }
+    };
 
-  //   checkSaved();
-  // }, [storyId]);
+    checkSaved();
+  }, [storyId]);
 
   const handleSave = async () => {
     if (saved || isLoading) return;
