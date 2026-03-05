@@ -3,9 +3,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useQuery } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
 import toast from 'react-hot-toast';
-import { useAuth } from '@/hooks/useAuth';
+import { getMe } from '@/lib/api/clientApi';
 import { useAuthModalStore } from '@/lib/store/authModalStore';
 import { addToFavouriteStory, removeFavouriteStory } from '@/lib/api/clientApi';
 import type { StoryCardBase, StoryCardUser } from '@/types/story';
@@ -26,7 +27,18 @@ export default function TravellersStoriesItem({
   priority = false,
   mode = 'default', // 👈 ПО УМОЛЧАНИЮ
 }: TravellersStoriesItemProps) {
-  const { isAuthenticated, user: currentUser } = useAuth();
+  // Локальна перевірка авторизації тільки для цієї картки.
+  // Як відкотити: видаліть цей блок і поверніть використання useAuth().
+  const hasAccessToken =
+    typeof document !== 'undefined' && document.cookie.includes('accessToken=');
+
+  const { data: currentUser } = useQuery({
+    queryKey: ['currentUser'],
+    queryFn: getMe,
+    enabled: hasAccessToken,
+  });
+
+  const isAuthenticated = !!currentUser;
   const { open } = useAuthModalStore();
 
   const articleText = story.article || story.description || '';

@@ -1,12 +1,10 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
-import { AxiosResponse } from 'axios';
-
+import { useState, useEffect, useCallback, useRef } from 'react';
 import TravellersStories from '@/components/TravellersStories/TravellersStories';
-import nextServer from '@/lib/api/api';
 
+let iziToast: typeof import('izitoast').default | null = null;
+import nextServer from '@/lib/api/api';
 import type {
   Category,
   Owner,
@@ -16,6 +14,7 @@ import type {
 } from '@/types/story';
 
 import styles from './StoriesPage.module.css';
+import { CATEGORIES, CATEGORY_MAP } from './constants';
 
 type StoryCategory = string | Category;
 type StoryOwner = string | Owner | StoryCardUser;
@@ -31,71 +30,120 @@ type ApiResponse = Omit<StoriesResponse, 'stories'> & {
 
 type NormalizedStory = StoryCard;
 
-interface UsersResponse {
-  users: StoryCardUser[];
-  totalUsers: number;
-  page: number;
-  perPage: number;
-  totalPages: number;
-}
+const getCategoryId = (category: StoryCategory) =>
+  typeof category === 'string' ? category : category?._id || '';
 
-const CATEGORIES = [
-  { id: 'all', name: 'Всі історії' },
-  { id: '68fb50c80ae91338641121f2', name: 'Європа' },
-  { id: '68fb50c80ae91338641121f0', name: 'Азія' },
-  { id: '68fb50c80ae91338641121f6', name: 'Пустелі' },
-  { id: '68fb50c80ae91338641121f4', name: 'Африка' },
-];
+const getOwnerId = (owner: StoryOwner) =>
+  typeof owner === 'string' ? owner : owner?._id || '';
 
-const CATEGORY_MAP: Record<string, string> = {
-  '68fb50c80ae91338641121f2': 'Європа',
-  '68fb50c80ae91338641121f0': 'Азія',
-  '68fb50c80ae91338641121f6': 'Пустелі',
-  '68fb50c80ae91338641121f4': 'Африка',
-  '68fb50c80ae91338641121f3': 'Америка',
-  '68fb50c80ae91338641121f1': 'Кавказ',
-  '68fb50c80ae91338641121f7': 'Кавказ',
-  '68fb50c80ae91338641121f8': 'Океанія',
-  '68fb50c80ae91338641121f9': 'Балкани',
-};
+const getOwnerUser = (owner: StoryOwner) =>
+  typeof owner === 'string' ? undefined : owner;
 
 export default function StoriesPage() {
-  const getBaseDisplayCount = () => {
-    if (typeof window === 'undefined') return 9;
-
-    return window.matchMedia('(min-width:768px) and (max-width:1439px)').matches
-      ? 8
-      : 9;
-  };
-
-  const [baseDisplayCount, setBaseDisplayCount] = useState(getBaseDisplayCount);
-  const [displayCount, setDisplayCount] = useState(getBaseDisplayCount);
+  const [allStories, setAllStories] = useState<NormalizedStory[]>([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [loading, setLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [perPage, setPerPage] = useState(9);
+  const [isPerPageReady, setIsPerPageReady] = useState(false);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
-
-  const pageSize = baseDisplayCount;
+  const gridRef = useRef<HTMLDivElement | null>(null);
+  const prevLengthRef = useRef(0);
+  const loadMoreBtnRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia(
-      '(min-width:768px) and (max-width:1439px)',
-    );
-
-    const handleChange = () => {
-      const next = mediaQuery.matches ? 8 : 9;
-
-      setBaseDisplayCount(next);
-      setDisplayCount(next);
-    };
-
-    handleChange();
-
-    mediaQuery.addEventListener('change', handleChange);
-
-    return () => mediaQuery.removeEventListener('change', handleChange);
+    import('izitoast').then((mod) => {
+      iziToast = mod.default;
+    });
   }, []);
 
+  // Визначення perPage по ширині екрана
+  const updatePerPage = useCallback(() => {
+    const isTablet = window.matchMedia(
+      '(min-width:768px) and (max-width:1439px)',
+    ).matches;
+    setPerPage(isTablet ? 8 : 9);
+    setIsPerPageReady(true);
+  }, []);
+
+  useEffect(() => {
+    updatePerPage();
+    window.addEventListener('resize', updatePerPage);
+    return () => window.removeEventListener('resize', updatePerPage);
+  }, [updatePerPage]);
+
+  // Функція завантаження stories
+  const loadStories = useCallback(
+    async (nextPage = 1) => {
+      if (!isPerPageReady) return;
+
+      setLoading(true);
+      try {
+        const response = await nextServer.get<ApiResponse>('/stories', {
+          params: {
+            page: nextPage,
+            perPage,
+            ...(selectedCategory !== 'all'
+              ? { category: selectedCategory }
+              : {}),
+          },
+        });
+
+        const normalizedData = response.data.stories.map((story) => ({
+          ...story,
+          category: getCategoryId(story.category),
+          ownerId: getOwnerId(story.ownerId),
+          ownerUser: getOwnerUser(story.ownerId),
+        }));
+
+        setAllStories((prev) =>
+          nextPage === 1 ? normalizedData : [...prev, ...normalizedData],
+        );
+
+        setPage(nextPage);
+        setTotalPages(response.data.totalPages || 1);
+      } catch (err) {
+        console.error('Failed to load stories', err);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [selectedCategory, perPage, isPerPageReady],
+  );
+
+  // Завантаження при монтуванні і зміні категорії
+  useEffect(() => {
+    loadStories(1);
+  }, [loadStories]);
+
+  // Auto-scroll до нової картки після завантаження
+  useEffect(() => {
+    const wrapper = gridRef.current;
+    if (!wrapper) return;
+
+    const prevLength = prevLengthRef.current;
+    const currentLength = allStories.length;
+
+    if (currentLength <= prevLength) return;
+
+    // Знаходимо grid всередині wrapper
+    const grid = wrapper.querySelector('[class*="grid"]');
+    if (!grid) return;
+
+    const newCard = grid.children[prevLength];
+
+    if (newCard instanceof HTMLElement) {
+      newCard.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }
+  }, [allStories]);
+
+  // Dropdown outside click handler
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -115,103 +163,30 @@ export default function StoriesPage() {
     };
   }, [isDropdownOpen]);
 
-  const getCategoryId = (category: StoryCategory) =>
-    typeof category === 'string' ? category : category?._id || '';
+  const hasMoreStories = page < totalPages;
 
-  const getOwnerId = (owner: StoryOwner) =>
-    typeof owner === 'string' ? owner : owner?._id || '';
-
-  const getOwnerUser = (owner: StoryOwner) =>
-    typeof owner === 'string' ? undefined : owner;
-
-  const { data, isLoading, error, fetchNextPage, hasNextPage } =
-    useInfiniteQuery<ApiResponse>({
-      queryKey: ['stories', selectedCategory, pageSize],
-
-      queryFn: async ({ pageParam = 1 }) => {
-        const response = await nextServer.get('/stories', {
-          params: {
-            page: pageParam,
-            perPage: pageSize,
-            ...(selectedCategory !== 'all'
-              ? { category: selectedCategory }
-              : {}),
-          },
-        });
-
-        return response.data;
-      },
-
-      initialPageParam: 1,
-
-      getNextPageParam: (lastPage) =>
-        lastPage.page < lastPage.totalPages ? lastPage.page + 1 : undefined,
-    });
-
-  const { data: usersData } = useQuery<UsersResponse>({
-    queryKey: ['users'],
-
-    queryFn: async () => {
-      const pages = await Promise.all(
-        [1, 2, 3, 4, 5].map((page) =>
-          nextServer.get('/users', {
-            params: { page, perPage: 9 },
-          }),
-        ),
-      );
-
-      const allUsers = pages.flatMap(
-        (response: AxiosResponse<UsersResponse>) => response.data.users || [],
-      );
-
-      return {
-        users: allUsers,
-        totalUsers: pages[0].data.totalUsers,
-        page: 1,
-        perPage: allUsers.length,
-        totalPages: pages[0].data.totalPages,
-      };
-    },
-  });
-
-  const usersMap = useMemo(() => {
-    const map: Record<string, StoryCardUser> = {};
-
-    usersData?.users?.forEach((user) => {
-      map[user._id] = user;
-    });
-
-    return map;
-  }, [usersData?.users]);
-
-  const normalizedStories: NormalizedStory[] = useMemo(() => {
-    const allStories = data?.pages.flatMap((page) => page.stories) || [];
-
-    return allStories.map((story) => ({
-      ...story,
-      category: getCategoryId(story.category),
-      ownerId: getOwnerId(story.ownerId),
-      ownerUser: getOwnerUser(story.ownerId),
-    }));
-  }, [data?.pages]);
-
-  const displayedStories = normalizedStories.slice(0, displayCount);
-  const totalStories = data?.pages[0]?.totalStories || 0;
-  const hasMoreStories = displayCount < totalStories;
-
-  const handleLoadMore = () => {
-    const next = displayCount + 3;
-
-    setDisplayCount(next);
-
-    if (next > normalizedStories.length && hasNextPage) {
-      fetchNextPage();
+  const handleLoadMore = async () => {
+    if (page >= totalPages) {
+      iziToast?.info({
+        message: 'Це остання сторінка',
+        position: 'topRight',
+      });
+      return;
     }
+
+    prevLengthRef.current = allStories.length;
+
+    if (!loading) {
+      loadStories(page + 1);
+    }
+  };
+
+  const handleMouseDown = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
   };
 
   const handleCategoryChange = (categoryId: string) => {
     setSelectedCategory(categoryId);
-    setDisplayCount(baseDisplayCount);
     setIsDropdownOpen(false);
   };
 
@@ -286,30 +261,36 @@ export default function StoriesPage() {
           </div>
         </div>
 
-        {isLoading && <p className={styles.loading}>Завантаження...</p>}
-        {error && <p className={styles.error}>Помилка завантаження історій</p>}
+        {loading && allStories.length === 0 && (
+          <p className={styles.loading}>Завантаження...</p>
+        )}
 
-        {normalizedStories.length > 0 && (
+        {allStories.length > 0 && (
           <>
-            <TravellersStories
-              stories={displayedStories}
-              usersMap={usersMap}
-              categoryMap={CATEGORY_MAP}
-            />
+            <div ref={gridRef}>
+              <TravellersStories
+                stories={allStories}
+                usersMap={{}}
+                categoryMap={CATEGORY_MAP}
+              />
+            </div>
 
             {hasMoreStories && (
               <button
+                ref={loadMoreBtnRef}
                 type="button"
                 className={styles.loadMoreBtn}
                 onClick={handleLoadMore}
+                onMouseDown={handleMouseDown}
+                disabled={loading}
               >
-                Показати ще
+                {loading ? 'Завантаження...' : 'Показати ще'}
               </button>
             )}
           </>
         )}
 
-        {!isLoading && normalizedStories.length === 0 && (
+        {!loading && allStories.length === 0 && (
           <p className={styles.noResults}>Немає історій в цій категорії</p>
         )}
       </div>

@@ -1,11 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useRef } from 'react';
-
+import { useState, useEffect, useRef } from 'react';
 import { fetchUsers } from '@/lib/api/clientApi';
 import type { User } from '@/types/user';
-
 import TravellersList from '@/components/OurTravellers/TravellersList';
 import Skeleton from '@/components/Skeleton/Skeleton';
 import css from '@/components/OurTravellers/OurTravellers.module.css';
@@ -22,6 +19,7 @@ export default function TravellersPageClient() {
   const gridRef = useRef<HTMLDivElement | null>(null);
   const prevLengthRef = useRef(0);
 
+  // Підключаємо iziToast
   useEffect(() => {
     import('izitoast').then((mod) => {
       iziToast = mod.default;
@@ -41,14 +39,14 @@ export default function TravellersPageClient() {
     return () => window.removeEventListener('resize', determineInitialCards);
   }, []);
 
-  // початкове завантаження з Promise.all
+  // Початкове завантаження з Promise.all
   useEffect(() => {
     async function loadInitial() {
       setLoading(true);
       try {
         const pagesToLoad = Math.ceil(initialCards / 4); // 4 картки на сторінку
         const promises = Array.from({ length: pagesToLoad }, (_, i) =>
-          fetchUsers({ page: i + 1, perPage: 4 }),
+          fetchUsers({ page: i + 1, perPage: 4 })
         );
         const results = await Promise.all(promises);
         const allUsers = results.flatMap((r) => r.users);
@@ -65,17 +63,16 @@ export default function TravellersPageClient() {
     loadInitial();
   }, [initialCards]);
 
+  // Скрол на нові картки
   useEffect(() => {
     const grid = gridRef.current;
     if (!grid) return;
 
     const prevLength = prevLengthRef.current;
     const currentLength = travellers.length;
-
     if (currentLength <= prevLength) return;
 
     const newCard = grid.children[prevLength];
-
     if (newCard instanceof HTMLElement) {
       newCard.scrollIntoView({
         behavior: 'smooth',
@@ -84,6 +81,7 @@ export default function TravellersPageClient() {
     }
   }, [travellers]);
 
+  // Підвантаження наступної сторінки
   const handleLoadMore = async () => {
     if (page >= totalPages) {
       iziToast?.info({
@@ -94,8 +92,8 @@ export default function TravellersPageClient() {
     }
 
     prevLengthRef.current = travellers.length;
-
     setLoading(true);
+
     try {
       const nextPage = page + 1;
       const data = await fetchUsers({ page: nextPage, perPage: 4 });

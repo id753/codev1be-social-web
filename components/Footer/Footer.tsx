@@ -29,7 +29,7 @@ const socials = [
 const navBase = [
   { href: '/', label: 'Головна' },
   { href: '/stories', label: 'Історії' },
-  { href: '/travelers', label: 'Мандрівники' },
+  { href: '/travellers', label: 'Мандрівники' },
 ];
 
 const navProfile = { href: '/profile', label: 'Профіль' };
