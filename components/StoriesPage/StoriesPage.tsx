@@ -104,7 +104,16 @@ export default function StoriesPage() {
         );
 
         setPage(nextPage);
-        setTotalPages(response.data.totalPages || 1);
+        const responseTotalPages = response.data.totalPages || 1;
+        setTotalPages(responseTotalPages);
+
+        // Показуємо toast якщо щойно завантажили останню сторінку через "Показати ще"
+        if (nextPage > 1 && nextPage >= responseTotalPages) {
+          iziToast?.info({
+            message: 'Це остання сторінка',
+            position: 'topRight',
+          });
+        }
       } catch (err) {
         console.error('Failed to load stories', err);
       } finally {
@@ -167,10 +176,6 @@ export default function StoriesPage() {
 
   const handleLoadMore = async () => {
     if (page >= totalPages) {
-      iziToast?.info({
-        message: 'Це остання сторінка',
-        position: 'topRight',
-      });
       return;
     }
 
