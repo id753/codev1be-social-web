@@ -18,6 +18,7 @@ interface TravellersStoriesItemProps {
   categoryName: string;
   priority?: boolean;
   mode?: 'default' | 'own';
+  onUnsave?: (storyId: string) => void;
 }
 
 export default function TravellersStoriesItem({
@@ -26,18 +27,14 @@ export default function TravellersStoriesItem({
   categoryName,
   priority = false,
   mode = 'default',
+  onUnsave,
 }: TravellersStoriesItemProps) {
-  // Локальна перевірка авторизації тільки для цієї картки.
-  // Як відкотити: видаліть цей блок і поверніть використання useAuth().
-  const hasAccessToken =
-    typeof document !== 'undefined' && document.cookie.includes('accessToken=');
-
+  // Use react-query to check authentication (handles httpOnly cookies automatically)
   const { data: currentUser } = useQuery({
     queryKey: ['currentUser'],
     queryFn: getMe,
-    enabled: hasAccessToken,
+    retry: false,
   });
-
   const isAuthenticated = !!currentUser;
   const { open } = useAuthModalStore();
 
@@ -93,6 +90,7 @@ export default function TravellersStoriesItem({
         await removeFavouriteStory(story._id);
         setIsSaved(false);
         setFavoritesCount((prev) => Math.max(prev - 1, 0));
+        onUnsave?.(story._id);
       } else {
         await addToFavouriteStory(story._id);
         setIsSaved(true);

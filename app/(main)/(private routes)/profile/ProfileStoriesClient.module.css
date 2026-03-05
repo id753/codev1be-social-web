@@ -1,0 +1,86 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+.skeletonGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.skeletonCard {
+  height: 360px;
+  border-radius: 16px;
+  background: linear-gradient(90deg, #f1f3f9 25%, #e7ebf6 37%, #f1f3f9 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.2s ease-in-out infinite;
+}
+
+.loadingText,
+.endText,
+.empty,
+.error {
+  margin: 0;
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.loadingText,
+.endText,
+.empty {
+  color: #4f5b78;
+}
+
+.error {
+  color: #c62828;
+}
+
+.loadMoreBtn {
+  align-self: center;
+  min-width: 210px;
+  height: 44px;
+  border: 1px solid #c5cde5;
+  border-radius: 12px;
+  background-color: #ffffff;
+  color: #2d3a66;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.loadMoreBtn:hover:not(:disabled) {
+  border-color: #8ea2e0;
+  background-color: #f5f7ff;
+}
+
+.loadMoreBtn:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .skeletonGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media only screen and (min-width: 1440px) {
+  .skeletonGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

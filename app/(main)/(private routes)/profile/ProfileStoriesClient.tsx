@@ -145,6 +145,12 @@ export default function ProfileStoriesClient({ variant }: Props) {
     () => stories.map(normalizeStoryToCard),
     [stories],
   );
+
+  const handleUnsave = useCallback((storyId: string) => {
+    if (variant !== 'saved') return;
+    setStories((prev) => prev.filter((story) => story._id !== storyId));
+  }, [variant]);
+
   const usersMap = useMemo(() => buildUsersMap(cards), [cards]);
   const categoryMap = useMemo(() => buildCategoryMap(categories), [categories]);
 
@@ -174,6 +180,7 @@ export default function ProfileStoriesClient({ variant }: Props) {
             usersMap={usersMap}
             categoryMap={categoryMap}
             mode={variant === 'own' ? 'own' : 'default'}
+            onUnsave={handleUnsave}
           />
 
           {hasMore ? (
