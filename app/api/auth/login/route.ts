@@ -15,49 +15,68 @@ import { parse } from 'cookie';
 import { isAxiosError } from 'axios';
 import serverApi from '@/app/api/api';
 
+function extractCookieValue(setCookie: string, name: string) {
+  const match = setCookie.match(new RegExp(`${name}=([^;]+)`));
+  return match?.[1];
+}
+// работает
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const apiRes = await serverApi.post('/auth/login', body);
 
-    const cookieStore = await cookies();
-    const setCookieHeader = apiRes.headers['set-cookie'];
+    const upstream = await serverApi.post('/auth/login', body);
 
-    if (setCookieHeader) {
-      const cookieArray = Array.isArray(setCookieHeader)
-        ? setCookieHeader
-        : [setCookieHeader];
+    const setCookie = upstream.headers['set-cookie'] ?? [];
+    const arr = Array.isArray(setCookie) ? setCookie : [setCookie];
 
-      for (const cookieStr of cookieArray) {
-        const parsed = parse(cookieStr);
-        const allKeys = Object.keys(parsed);
-        const cookieName = allKeys[0];
-        const cookieValue = parsed[cookieName];
+    const accessRaw = arr
+      .map((s) => extractCookieValue(s, 'accessToken'))
+      .find(Boolean);
+    const refreshRaw = arr
+      .map((s) => extractCookieValue(s, 'refreshToken'))
+      .find(Boolean);
+    const sessionRaw = arr
+      .map((s) => extractCookieValue(s, 'sessionId'))
+      .find(Boolean);
 
-        if (!cookieName || !cookieValue) continue;
+    const access = accessRaw ? decodeURIComponent(accessRaw) : undefined;
+    const refresh = refreshRaw ? decodeURIComponent(refreshRaw) : undefined;
+    const session = sessionRaw ? decodeURIComponent(sessionRaw) : undefined;
 
-        cookieStore.set(cookieName, cookieValue, {
-          expires: parsed.Expires ? new Date(parsed.Expires) : undefined,
-          path: parsed.Path || '/',
-          maxAge: parsed['Max-Age'] ? Number(parsed['Max-Age']) : undefined,
-          httpOnly: true,
-          secure: process.env.NODE_ENV === 'production',
-          sameSite: 'lax' as const,
-        });
-      }
+    const secure = process.env.NODE_ENV === 'production';
+
+    const response = NextResponse.json(upstream.data, { status: 200 });
+
+    if (access) {
+      response.cookies.set('accessToken', access, {
+        httpOnly: true,
+        secure,
+        sameSite: 'lax',
+        path: '/',
+      });
     }
 
-    return NextResponse.json(apiRes.data, { status: apiRes.status });
+    if (refresh) {
+      response.cookies.set('refreshToken', refresh, {
+        httpOnly: true,
+        secure,
+        sameSite: 'lax',
+        path: '/',
+      });
+    }
+
+    if (session) {
+      response.cookies.set('sessionId', session, {
+        httpOnly: true,
+        secure,
+        sameSite: 'lax',
+        path: '/',
+      });
+    }
+
+    return response;
   } catch (error) {
-    if (isAxiosError(error)) {
-      return NextResponse.json(
-        { message: error.response?.data?.message || 'Authentication failed' },
-        { status: error.response?.status || 401 },
-      );
-    }
-    return NextResponse.json(
-      { message: 'Internal Server Error' },
-      { status: 500 },
-    );
+    return NextResponse.json({ message: 'Login failed' }, { status: 500 });
   }
 }

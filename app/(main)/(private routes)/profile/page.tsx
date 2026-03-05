@@ -1,10 +1,7 @@
-import { Metadata } from "next";
 import { redirect } from 'next/navigation';
-
-export const metadata: Metadata = {
-  title: 'Мій профіль',
-}
-
-export default function ProfilePage() {
+const ProfilePage = async () => {
   redirect('/profile/saved');
-}
+  return null;
+};
+
+export default ProfilePage;

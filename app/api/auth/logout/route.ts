@@ -1,29 +1,54 @@
-// import { NextResponse } from 'next/server';
-// import serverApi from '@/app/api/api';
-
-// export async function POST() {
-//   await serverApi.post('/auth/logout');
-
-//   return new NextResponse(null, {
-//     status: 204,
-//   });
-// }
+// app/api/auth/logout/route.ts
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
+import axios from 'axios';
 import serverApi from '@/app/api/api';
 
 export async function POST() {
-  const cookieStore = await cookies();
+  const cookieHeader = (await cookies())
+    .getAll()
+    .filter((c) =>
+      ['accessToken', 'refreshToken', 'sessionId'].includes(c.name),
+    )
+    .map((c) => `${c.name}=${c.value}`)
+    .join('; ');
 
+  // даже если backend logout упадёт — мы всё равно чистим cookies на фронте
   try {
-    await serverApi.post('/auth/logout');
-  } catch (error) {
-    console.error('Logout error on backend', error);
+    await serverApi.post('/auth/logout', null, {
+      headers: cookieHeader ? { cookie: cookieHeader } : {},
+    });
+  } catch (e) {
+    if (!axios.isAxiosError(e)) {
+      // ignore
+    }
   }
 
-  cookieStore.delete('accessToken');
-  cookieStore.delete('refreshToken');
-  cookieStore.delete('sessionId');
+  const secure = process.env.NODE_ENV === 'production';
+  const res = new NextResponse(null, { status: 204 });
 
-  return NextResponse.json({ message: 'Logged out' });
+  // delete reliably (match path + sameSite + secure)
+  res.cookies.set('accessToken', '', {
+    httpOnly: true,
+    secure,
+    sameSite: 'lax',
+    path: '/',
+    maxAge: 0,
+  });
+  res.cookies.set('refreshToken', '', {
+    httpOnly: true,
+    secure,
+    sameSite: 'lax',
+    path: '/',
+    maxAge: 0,
+  });
+  res.cookies.set('sessionId', '', {
+    httpOnly: true,
+    secure,
+    sameSite: 'lax',
+    path: '/',
+    maxAge: 0,
+  });
+
+  return res;
 }

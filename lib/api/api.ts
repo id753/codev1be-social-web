@@ -1,3 +1,5 @@
+'use client';
+
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 
 type FailedRequest = {
@@ -6,64 +8,54 @@ type FailedRequest = {
   config: InternalAxiosRequestConfig;
 };
 
-// const nextServer = axios.create({
-//   baseURL: process.env.NEXT_PUBLIC_API_URL + '/api',
-//   withCredentials: true,
-// });
-
-// @/lib/api/api.ts
-const isBrowser = typeof window !== 'undefined';
-
-export const nextServer = axios.create({
-  baseURL: isBrowser ? '/api' : process.env.NEXT_PUBLIC_API_URL + '/api',
+const nextServer = axios.create({
+  baseURL: '/api',
   withCredentials: true,
 });
 
 let isRefreshing = false;
-let refreshFailed = false;
-
+let refreshDenied = false;
 let failedQueue: FailedRequest[] = [];
+
+export function resetRefreshDenied() {
+  refreshDenied = false;
+}
 
 const processQueue = (error?: unknown) => {
   failedQueue.forEach(({ resolve, reject, config }) => {
-    if (error) {
-      reject(error);
-    } else {
-      resolve(nextServer(config));
-    }
+    if (error) reject(error);
+    else resolve(nextServer(config));
   });
-
   failedQueue = [];
 };
 
 nextServer.interceptors.response.use(
   (response) => response,
-
   async (error: AxiosError) => {
-    const originalRequest = error.config as InternalAxiosRequestConfig & {
-      _retry?: boolean;
-    };
+    const originalRequest = error.config as
+      | (InternalAxiosRequestConfig & { _retry?: boolean })
+      | undefined;
+
+    if (!originalRequest) return Promise.reject(error);
 
     const status = error.response?.status;
-    const url = originalRequest.url || '';
+    const url = originalRequest.url ?? '';
 
-    if (refreshFailed) {
-      return Promise.reject(error);
-    }
+    // if refresh already denied, don't attempt refresh again (only matters for 401)
+    if (refreshDenied && status === 401) return Promise.reject(error);
 
-    if (
-      status === 401 &&
-      !originalRequest._retry &&
-      !url.includes('/auth/refresh') &&
-      !url.includes('/users/me')
-    ) {
+    // do not refresh for auth-check endpoint
+    if (url.includes('/users/me')) return Promise.reject(error);
+
+    // never refresh refresh/login/logout endpoints
+    if (url.includes('/auth/refresh')) return Promise.reject(error);
+    if (url.includes('/auth/login')) return Promise.reject(error);
+    if (url.includes('/auth/logout')) return Promise.reject(error);
+
+    if (status === 401 && !originalRequest._retry) {
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
-          failedQueue.push({
-            resolve,
-            reject,
-            config: originalRequest,
-          });
+          failedQueue.push({ resolve, reject, config: originalRequest });
         });
       }
 
@@ -71,22 +63,19 @@ nextServer.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        // await axios.post(
-        //   `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
-        //   {},
-        //   {
-        //     withCredentials: true,
-        //   },
-        // );
-        await axios.post('/api/auth/refresh', {}, { withCredentials: true });
+        await nextServer.post('/auth/refresh');
 
         processQueue();
-
         return nextServer(originalRequest);
       } catch (refreshError) {
         processQueue(refreshError);
 
-        refreshFailed = true;
+        if (
+          axios.isAxiosError(refreshError) &&
+          refreshError.response?.status === 401
+        ) {
+          refreshDenied = true; // stop loops until next successful login
+        }
 
         return Promise.reject(refreshError);
       } finally {

@@ -1,49 +1,51 @@
-'use client';
-
-import { useAccumulatedStories } from '@/hooks/useAccumulatedStories';
-import { fetchFavouriteStories } from '@/lib/api/clientApi';
+import { redirect } from 'next/navigation';
 import TravellersStories from '@/components/TravellersStories/TravellersStories';
-import styles from '@/app/(main)/(private routes)/profile/saved/SavedStories.module.css';
+import { getMeServer, fetchMyStoriesServer } from '@/lib/api/serverApi';
+import serverApi from '@/app/api/api';
 
-export default function SavedStories() {
-  const { accStories, isLoading, isError, isFetching, hasMore, loadMore } =
-    useAccumulatedStories({
-      queryKey: ['stories', 'saved'],
-      queryFn: (page, perPage) => fetchFavouriteStories({ page, perPage }),
-    });
+import type { StoryCard, StoryCardUser, Category } from '@/types/story';
 
-  if (isLoading) {
-    return (
-      <div className={styles.grid}>
-        {Array.from({ length: 6 }).map((_, i) => (
-          <div key={i} className={styles.skeleton} />
-        ))}
-      </div>
-    );
+const PER_PAGE = 4;
+
+function buildUsersMap(stories: StoryCard[]): Record<string, StoryCardUser> {
+  const map: Record<string, StoryCardUser> = {};
+
+  for (const story of stories) {
+    if (story.ownerUser && story.ownerId) {
+      map[story.ownerId] = story.ownerUser;
+    }
   }
 
-  if (isError) {
-    return (
-      <p className={styles.error}>Не вдалось завантажити збережені історії</p>
-    );
-  }
+  return map;
+}
 
-  if (!accStories.length) {
-    return <p className={styles.empty}>Збережених історій поки немає</p>;
-  }
+async function buildCategoryMap(): Promise<Record<string, string>> {
+  const { data } = await serverApi.get<Category[]>('/categories');
+
+  return (data ?? []).reduce<Record<string, string>>((acc, c) => {
+    acc[c._id] = c.name;
+    return acc;
+  }, {});
+}
+
+export default async function OwnStoriesPage() {
+  // const user = await getMeServer();
+  // if (!user) redirect('/login');
+
+  const [{ stories }, categoryMap] = await Promise.all([
+    fetchMyStoriesServer({ page: 1, perPage: PER_PAGE }),
+    buildCategoryMap(),
+  ]);
+
+  const storyCards = stories as unknown as StoryCard[];
+  const usersMap = buildUsersMap(storyCards);
 
   return (
-    <div>
-      <TravellersStories stories={accStories} usersMap={{}} categoryMap={{}} />
-      {hasMore && (
-        <button
-          className={styles.loadMore}
-          onClick={loadMore}
-          disabled={isFetching}
-        >
-          {isFetching ? 'Завантаження...' : 'Показати ще'}
-        </button>
-      )}
-    </div>
+    <TravellersStories
+      stories={storyCards}
+      usersMap={usersMap}
+      categoryMap={categoryMap}
+      mode="own"
+    />
   );
 }

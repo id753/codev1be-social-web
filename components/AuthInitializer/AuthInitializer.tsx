@@ -1,17 +1,3 @@
-// 'use client';
-
-// import { useEffect } from 'react';
-// import { useAuthStore } from '@/lib/store/authStore';
-
-// export default function AuthInitializer() {
-//   const checkAuth = useAuthStore((s) => s.checkAuth);
-
-//   useEffect(() => {
-//     checkAuth();
-//   }, [checkAuth]);
-
-//   return null;
-// }
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -30,7 +16,7 @@ export default function AuthInitializer({ children, initialUser }: Props) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const initAuth = async () => {
+    const checkAuth = async () => {
       try {
         if (initialUser) {
           setUser(initialUser);
@@ -45,11 +31,11 @@ export default function AuthInitializer({ children, initialUser }: Props) {
       } catch {
         clearIsAuthenticated();
       } finally {
-        setTimeout(() => setIsLoading(false), 0);
+        setIsLoading(false);
       }
     };
 
-    initAuth();
+    checkAuth();
   }, [initialUser, setUser, clearIsAuthenticated]);
 
   if (isLoading) {
