@@ -111,3 +111,15 @@ export async function fetchFavouriteStoriesServer(
 
   return response.data;
 }
+
+export async function checkServerSession() {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
+    {
+      method: 'POST',
+      credentials: 'include',
+    },
+  );
+
+  return response;
+}
