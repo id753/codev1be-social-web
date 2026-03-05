@@ -14,6 +14,11 @@ export async function getMeServer(): Promise<User | null> {
   }
 }
 
+export async function checkServerSession() {
+  const response = await serverApi.post('/auth/refresh');
+  return response;
+}
+
 export async function logoutServer(): Promise<void> {
   await serverApi.post('/auth/logout');
 }

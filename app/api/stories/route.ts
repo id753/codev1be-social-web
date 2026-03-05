@@ -10,6 +10,8 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 
     const perPage = req.nextUrl.searchParams.get('perPage');
 
+    const category = req.nextUrl.searchParams.get('category');
+
     const res = await serverApi.get<StoriesHttpResponse>(
       '/stories',
 
@@ -17,6 +19,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
         params: {
           page,
           perPage,
+          ...(category ? { category } : {}),
         },
       },
     );
