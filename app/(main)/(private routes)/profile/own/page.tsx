@@ -3,7 +3,7 @@
 import { useAccumulatedStories } from '@/hooks/useAccumulatedStories';
 import { fetchFavouriteStories } from '@/lib/api/clientApi';
 import TravellersStories from '@/components/TravellersStories/TravellersStories';
-import styles from './SavedStories.module.css';
+import styles from '@/app/(main)/(private routes)/profile/saved/SavedStories.module.css';
 
 export default function SavedStories() {
   const { accStories, isLoading, isError, isFetching, hasMore, loadMore } =
