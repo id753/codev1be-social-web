@@ -243,7 +243,7 @@
   font-weight: 600;
   color: var(--color-white);
   background-color: var(--color-royal-blue);
-  border: none;
+  border: 1px solid var(--color-royal-blue);
   border-radius: 8px;
   cursor: pointer;
   transition:
@@ -252,14 +252,31 @@
   min-width: 200px;
 }
 
-.loadMoreBtn:hover,
-.loadMoreBtn:focus {
+.loadMoreBtn:hover {
   color: var(--color-scheme-2-text);
   background-color: var(--color-royal-blue-lighter);
 }
 
+.loadMoreBtn:focus {
+  outline: none;
+}
+
+.loadMoreBtn:focus-visible {
+  color: var(--color-scheme-2-text);
+  background-color: var(--color-royal-blue-lighter);
+  outline: 2px solid var(--color-white);
+  outline-offset: 2px;
+}
+
 .loadMoreBtn:active {
   background-color: var(--color-royal-blue-light);
+  color: var(--color-scheme-2-text);
+}
+
+.loadMoreBtn:disabled {
+  background-color: var(--color-royal-blue);
+  color: var(--color-white);
+  opacity: 0.3;
 }
 
 /* Tablet (768px) */

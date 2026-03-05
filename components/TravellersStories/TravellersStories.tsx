@@ -22,7 +22,7 @@ export default function TravellersStories({
     <div className={styles.grid}>
       {stories.map((story, index) => (
         <TravellersStoriesItem
-          key={story._id}
+          key={`${story._id}-${index}`}
           story={story}
           user={story.ownerUser || usersMap[story.ownerId]}
           categoryName={categoryMap[story.category] || 'Категорія'}
