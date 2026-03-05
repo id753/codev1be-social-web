@@ -5,6 +5,7 @@ import axios from 'axios';
 
 export async function GET() {
   const store = await cookies();
+  console.log('users/me');
 
   const hasAuth =
     store.get('accessToken') ||

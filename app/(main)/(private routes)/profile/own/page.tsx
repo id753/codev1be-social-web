@@ -29,8 +29,8 @@ async function buildCategoryMap(): Promise<Record<string, string>> {
 }
 
 export default async function OwnStoriesPage() {
-  const user = await getMeServer();
-  if (!user) redirect('/login');
+  // const user = await getMeServer();
+  // if (!user) redirect('/login');
 
   const [{ stories }, categoryMap] = await Promise.all([
     fetchMyStoriesServer({ page: 1, perPage: PER_PAGE }),
