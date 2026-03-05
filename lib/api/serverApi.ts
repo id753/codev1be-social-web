@@ -14,6 +14,16 @@ export async function getMeServer(): Promise<User | null> {
   }
 }
 
+export async function checkServerSession(): Promise<Response> {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`, {
+    method: 'POST',
+    credentials: 'include',
+    cache: 'no-store',
+  });
+
+  return res;
+}
+
 export async function logoutServer(): Promise<void> {
   await serverApi.post('/auth/logout');
 }
@@ -98,14 +108,4 @@ export async function fetchFavouriteStoriesServer(
   });
 
   return response.data;
-}
-
-export async function checkServerSession(): Promise<Response> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`, {
-    method: 'POST',
-    credentials: 'include',
-    cache: 'no-store',
-  });
-
-  return res;
 }
