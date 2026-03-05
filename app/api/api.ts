@@ -11,7 +11,10 @@ const serverApi: AxiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL + '/api',
   withCredentials: true,
 });
-
+console.log(
+  'INIT serverApi baseURL =',
+  process.env.NEXT_PUBLIC_API_URL + '/api',
+);
 serverApi.interceptors.request.use(
   async (config: InternalAxiosRequestConfig) => {
     const cookieStore = await cookies();

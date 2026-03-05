@@ -16,7 +16,7 @@ interface TravellersStoriesItemProps {
   user?: StoryCardUser;
   categoryName: string;
   priority?: boolean;
-  mode?: 'default' | 'own';   // 👈 ДОБАВИЛИ
+  mode?: 'default' | 'own';
 }
 
 export default function TravellersStoriesItem({
@@ -24,10 +24,12 @@ export default function TravellersStoriesItem({
   user,
   categoryName,
   priority = false,
-  mode = 'default',          // 👈 ПО УМОЛЧАНИЮ
+  mode = 'default',
 }: TravellersStoriesItemProps) {
   const { isAuthenticated, user: currentUser } = useAuth();
   const { open } = useAuthModalStore();
+
+  const isOwnMode = mode === 'own';
 
   const articleText = story.article || story.description || '';
 
@@ -51,23 +53,26 @@ export default function TravellersStoriesItem({
   }, [initialFavoriteCount]);
 
   useEffect(() => {
+    // In "own" mode, we do not show or manage "saved" state.
+    if (isOwnMode) return;
+
     if (!isAuthenticated || !currentUser) {
       setIsSaved(false);
       return;
     }
 
     setIsSaved(currentUser.savedArticles.includes(story._id));
-  }, [currentUser, isAuthenticated, story._id]);
+  }, [currentUser, isAuthenticated, story._id, isOwnMode]);
 
   const onToggleSave = async () => {
+    if (isOwnMode) return; // safety
+
     if (!isAuthenticated) {
       open();
       return;
     }
 
-    if (isLoading) {
-      return;
-    }
+    if (isLoading) return;
 
     setIsLoading(true);
 
@@ -133,9 +138,7 @@ export default function TravellersStoriesItem({
           </div>
 
           <div className={styles.authorInfo}>
-            <span className={styles.authorName}>
-              {user?.name || 'Автор'}
-            </span>
+            <span className={styles.authorName}>{user?.name || 'Автор'}</span>
             <div className={styles.time}>
               <span className={styles.date}>{formattedDate}</span>
               <span className={styles.divider}>•</span>
@@ -158,40 +161,52 @@ export default function TravellersStoriesItem({
           </div>
         </div>
 
-        {/* 🔥 ACTIONS */}
         <div className={styles.actions}>
           <Link href={`/stories/${story._id}`} className={styles.readBtn}>
             Переглянути статтю
           </Link>
-          <button
-            type="button"
-            className={`${styles.bookmarkBtn} ${isSaved ? styles.bookmarkBtnActive : ''}`}
-            onClick={onToggleSave}
-            disabled={isLoading}
-            aria-label={
-              isSaved
-                ? 'Видалити зі збережених історій'
-                : 'Додати в збережені історії'
-            }
-            aria-pressed={isSaved}
-          >
-            {isLoading ? (
-              <span className={styles.loader} aria-hidden="true" />
-            ) : (
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M12.0001 18.1677L7.23159 20.2077C6.66392 20.4524 6.12517 20.4065 5.61534 20.07C5.1055 19.7335 4.85059 19.2573 4.85059 18.6415V4.42898C4.85059 3.96731 5.0195 3.56706 5.35734 3.22823C5.695 2.88923 6.09384 2.71973 6.55384 2.71973H17.4463C17.908 2.71973 18.3083 2.88923 18.6471 3.22823C18.9861 3.56706 19.1556 3.96731 19.1556 4.42898V18.6415C19.1556 19.2573 18.8997 19.7335 18.3878 20.07C17.876 20.4065 17.3363 20.4524 16.7686 20.2077L12.0001 18.1677ZM12.0001 16.3455L17.4463 18.6415V4.42898H6.55384V18.6415L12.0001 16.3455ZM12.0001 4.42898H6.55384H17.4463H12.0001Z"
-                  fill="currentColor"
-                />
-              </svg>
-            )}
-          </button>
+
+          {isOwnMode ? (
+            <Link
+              href={`/stories/${story._id}/edit`}
+              className={styles.bookmarkBtn} // reuse button style
+              aria-label="Редагувати статтю"
+            >
+              Edit
+            </Link>
+          ) : (
+            <button
+              type="button"
+              className={`${styles.bookmarkBtn} ${
+                isSaved ? styles.bookmarkBtnActive : ''
+              }`}
+              onClick={onToggleSave}
+              disabled={isLoading}
+              aria-label={
+                isSaved
+                  ? 'Видалити зі збережених історій'
+                  : 'Додати в збережені історії'
+              }
+              aria-pressed={isSaved}
+            >
+              {isLoading ? (
+                <span className={styles.loader} aria-hidden="true" />
+              ) : (
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12.0001 18.1677L7.23159 20.2077C6.66392 20.4524 6.12517 20.4065 5.61534 20.07C5.1055 19.7335 4.85059 19.2573 4.85059 18.6415V4.42898C4.85059 3.96731 5.0195 3.56706 5.35734 3.22823C5.695 2.88923 6.09384 2.71973 6.55384 2.71973H17.4463C17.908 2.71973 18.3083 2.88923 18.6471 3.22823C18.9861 3.56706 19.1556 3.96731 19.1556 4.42898V18.6415C19.1556 19.2573 18.8997 19.7335 18.3878 20.07C17.876 20.4065 17.3363 20.4524 16.7686 20.2077L12.0001 18.1677ZM12.0001 16.3455L17.4463 18.6415V4.42898H6.55384V18.6415L12.0001 16.3455ZM12.0001 4.42898H6.55384H17.4463H12.0001Z"
+                    fill="currentColor"
+                  />
+                </svg>
+              )}
+            </button>
+          )}
         </div>
       </div>
     </article>

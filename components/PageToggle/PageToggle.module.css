@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
 
-   width: 100%;
+  width: 100%;
   max-width: 422px;
   height: 48px;
 
@@ -12,11 +12,12 @@
   border-radius: 12px;
   background: rgba(0, 0, 0, 0.04);
   border: 1px solid rgba(0, 0, 0, 0.08);
+  margin-bottom: 40px;
 }
 
 /* 🔥 каждая вкладка занимает половину */
 .tab {
-  flex: 1;                        /* равная ширина */
+  flex: 1; /* равная ширина */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -36,9 +37,10 @@
   text-decoration: none;
   cursor: pointer;
 
-  transition: background-color 200ms ease,
-              color 200ms ease,
-              border-color 200ms ease;
+  transition:
+    background-color 200ms ease,
+    color 200ms ease,
+    border-color 200ms ease;
 }
 
 .tab:hover {

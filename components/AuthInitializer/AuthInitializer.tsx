@@ -8,6 +8,7 @@ export default function AuthInitializer() {
 
   useEffect(() => {
     checkAuth();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return null;

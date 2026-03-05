@@ -4,28 +4,22 @@ export function middleware(req: NextRequest) {
   const accessToken = req.cookies.get('accessToken')?.value;
   const refreshToken = req.cookies.get('refreshToken')?.value;
 
-  const { pathname } = req.nextUrl;
-
   const isAuthenticated = Boolean(accessToken || refreshToken);
 
-  // GUEST ONLY ROUTES
-  const isGuestRoute = pathname === '/login' || pathname === '/register';
+  const { pathname } = req.nextUrl;
 
-  // Якщо авторизований — не пускати на login/register
-  if (isAuthenticated && isGuestRoute) {
-    return NextResponse.redirect(new URL('/', req.url));
+  const isProtectedRoute =
+    pathname.startsWith('/profile') ||
+    pathname === '/stories/create' ||
+    /^\/stories\/[^/]+\/edit$/.test(pathname);
+
+  if (!isAuthenticated && isProtectedRoute) {
+    return NextResponse.redirect(new URL('/login', req.url));
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: [
-    '/profile',
-    '/stories/create',
-    '/stories/:storyId/edit',
-    '/edit',
-    '/login',
-    '/register',
-  ],
+  matcher: ['/profile/:path*', '/stories/create', '/stories/:storyId/edit'],
 };

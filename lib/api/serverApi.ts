@@ -3,17 +3,27 @@ import serverApi from '@/app/api/api';
 import nextServer from './api';
 import { User } from '@/types/user';
 import { Story } from '@/types/story';
-
+import axios from 'axios';
 // ================= AUTH =================
-export async function getMeServer() {
-  const cookieStore = await cookies();
+export async function getMeServer(): Promise<User | null> {
+  const cookieHeader = (await cookies())
+    .getAll()
+    .filter((c) =>
+      ['accessToken', 'refreshToken', 'sessionId'].includes(c.name),
+    )
+    .map((c) => `${c.name}=${c.value}`)
+    .join('; ');
 
-  const { data } = await serverApi.get<User>('/api/users/me', {
-    headers: {
-      Cookie: cookieStore.toString(),
-    },
-  });
-  return data;
+  try {
+    const { data } = await serverApi.get('/users/me', {
+      headers: cookieHeader ? { cookie: cookieHeader } : {},
+    });
+
+    return data;
+  } catch (e) {
+    if (axios.isAxiosError(e) && e.response?.status === 401) return null;
+    throw e;
+  }
 }
 
 export async function logoutServer(): Promise<void> {

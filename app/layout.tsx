@@ -76,7 +76,7 @@ export default function RootLayout({
           <AuthInitializer />
 
           {children}
-          
+
           <ToastProvider />
           <AuthNavModal />
           <div id="modal-root" />
