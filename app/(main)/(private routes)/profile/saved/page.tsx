@@ -2,6 +2,8 @@ import { redirect } from 'next/navigation';
 import TravellersStories from '@/components/TravellersStories/TravellersStories';
 import { getMeServer, fetchFavouriteStoriesServer } from '@/lib/api/serverApi';
 import serverApi from '@/app/api/api';
+import Link from 'next/link';
+import css from './ProfileSavedStories.module.css';
 
 import type { StoryCard, StoryCardUser, Category } from '@/types/story';
 
@@ -39,7 +41,19 @@ export default async function SavedStoriesPage() {
 
   const storyCards = stories as unknown as StoryCard[];
   const usersMap = buildUsersMap(storyCards);
-
+  if (storyCards.length === 0) {
+    return (
+      <div className={css.noStories}>
+        <p>
+          У вас ще немає збережених історій, мершій збережіть вашу першу
+          історію!
+        </p>
+        <Link href="/stories" className={css.backBtn}>
+          До історій
+        </Link>
+      </div>
+    );
+  }
   return (
     <TravellersStories
       stories={storyCards}

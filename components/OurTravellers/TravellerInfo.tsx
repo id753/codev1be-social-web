@@ -24,6 +24,7 @@ export default function TravellerInfo({ traveller, variant = 'card' }: Props) {
           alt={traveller.name}
           width={isProfile ? 180 : 112}
           height={isProfile ? 180 : 112}
+          className={css.avatarImg}
         />
       </div>
 
@@ -36,13 +37,14 @@ export default function TravellerInfo({ traveller, variant = 'card' }: Props) {
           {traveller.description ?? 'Немає опису'}
         </p>
       </div>
-
-      <Link
-        href={`/travellers/${traveller._id}`}
-        className={`${css.buttonBase} ${css.profileButton}`}
-      >
-        Переглянути профіль
-      </Link>
+      {!isProfile && (
+        <Link
+          href={`/travellers/${traveller._id}`}
+          className={`${css.buttonBase} ${css.profileButton}`}
+        >
+          Переглянути профіль
+        </Link>
+      )}
     </div>
   );
 }

@@ -2,6 +2,9 @@ import { redirect } from 'next/navigation';
 import TravellersStories from '@/components/TravellersStories/TravellersStories';
 import { getMeServer, fetchMyStoriesServer } from '@/lib/api/serverApi';
 import serverApi from '@/app/api/api';
+import Link from 'next/link';
+// import css from '@/components/TravellerPage/TravellerPageClient.module.css';
+import css from './ProfileOwnStories.module.css';
 
 import type { StoryCard, StoryCardUser, Category } from '@/types/story';
 
@@ -39,6 +42,16 @@ export default async function OwnStoriesPage() {
 
   const storyCards = stories as unknown as StoryCard[];
   const usersMap = buildUsersMap(storyCards);
+  if (storyCards.length === 0) {
+    return (
+      <div className={css.noStories}>
+        <p>Ви ще нічого не публікували, поділіться своєю першою історією!</p>
+        <Link href="/stories/create" className={css.Btn}>
+          Опублікувати історію
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <TravellersStories

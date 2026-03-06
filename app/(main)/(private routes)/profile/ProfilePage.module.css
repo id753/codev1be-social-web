@@ -1,3 +1,9 @@
 .layoutStyle {
   margin-bottom: 40px;
 }
+
+.section {
+  background-color: var(--color-scheme-2-background);
+  padding-top: 32px;
+  padding-bottom: 64px;
+}

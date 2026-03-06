@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
 
-    const apiRes = await serverApi.post('/auth/login', body);
+    const apiRes = await serverApi.post('/auth/register', body);
 
     const cookieStore = await cookies();
     const setCookieHeader = apiRes.headers['set-cookie'];

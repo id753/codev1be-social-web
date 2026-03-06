@@ -265,7 +265,15 @@ export default function TravellerPageClient({ traveller, allStories }: Props) {
       <h1 className={css.title}>Історії мандрівника</h1>
 
       {allStories.length === 0 ? (
-        <p>Історій поки немає</p>
+        <div className={css.noStories}>
+          <p>Цей користувач ще не публікував історій</p>
+          <Link
+            href="/travellers"
+            className={`${css.buttonBase} ${css.backBtn}`}
+          >
+            Назад до історій
+          </Link>
+        </div>
       ) : (
         <div ref={gridRef}>
           <TravellersStories
