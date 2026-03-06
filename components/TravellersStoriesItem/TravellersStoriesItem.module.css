@@ -5,25 +5,18 @@
   border-radius: 16px;
   background: var(--color-scheme-2-foreground);
   width: 340px;
-
-  /* box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); */
-  /* transition: */
-  /* transform 0.3s ease, */
-  /* box-shadow 0.3s ease; */
-}
-
-.blogCard:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px var(--opacity-neutral-darkest-20);
   transition:
     transform 300ms ease-in-out,
     box-shadow 300ms ease-in-out;
 }
 
+.blogCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px var(--opacity-neutral-darkest-20);
+}
+
 .imageWrapper {
   position: relative;
-
-  /* 335x223 from design */
   aspect-ratio: 335 / 223;
   overflow: hidden;
   border-radius: 12px 12px 0 0;
@@ -34,7 +27,6 @@
   object-fit: cover;
   object-position: center;
   border-radius: 12px 12px 0 0;
-  /* height: 100%; */
 }
 .content {
   display: flex;
