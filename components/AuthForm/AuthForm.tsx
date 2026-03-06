@@ -6,10 +6,11 @@ import { useRouter } from 'next/navigation';
 import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
-import { useQueryClient } from '@tanstack/react-query';
+import toast from 'react-hot-toast';
 
 import { useAuthStore } from '@/lib/store/authStore';
 import nextServer from '@/lib/api/api';
+
 import styles from './AuthForm.module.css';
 
 // --- ТИПИ ---
@@ -19,24 +20,55 @@ interface AuthValues {
   password: string;
 }
 
-interface ApiErrorData {
-  message?: string;
-}
-
 interface AuthFormProps {
   type: 'login' | 'register';
 }
 
-// --- СХЕМИ ВАЛІДАЦІЇ ---
+// --- ПЕРЕКЛАД ПОМИЛОК ---
+function translateError(message?: string) {
+  if (!message) return 'Сталася помилка';
+
+  const m = message.toLowerCase();
+
+  if (m.includes('email in use')) {
+    return 'Користувач з такою поштою вже існує';
+  }
+
+  if (m.includes('invalid email or password')) {
+    return 'Невірна пошта або пароль';
+  }
+
+  if (m.includes('invalid email')) {
+    return 'Невірний формат пошти';
+  }
+
+  if (m.includes('unauthorized')) {
+    return 'Потрібна авторизація';
+  }
+
+  if (m.includes('network')) {
+    return 'Помилка мережі. Перевірте інтернет-зʼєднання';
+  }
+
+  if (m.includes('internal server error')) {
+    return 'Помилка сервера. Спробуйте пізніше';
+  }
+
+  return message;
+}
+
+// --- СХЕМИ ---
 const RegisterSchema = Yup.object().shape({
   name: Yup.string()
     .trim()
     .max(32, 'Максимум 32 символи')
     .required("Обов'язково"),
+
   email: Yup.string()
     .email('Невірний email')
     .max(64, 'Максимум 64 символи')
     .required("Обов'язково"),
+
   password: Yup.string()
     .min(8, 'Мінімум 8 символів')
     .max(138, 'Максимум 138 символів')
@@ -64,21 +96,25 @@ export default function AuthForm({ type }: AuthFormProps) {
     values: AuthValues,
     helpers: FormikHelpers<AuthValues>,
   ) => {
-    helpers.setStatus(null);
-    const endpoint = type === 'register' ? '/auth/register' : '/auth/login';
+    const endpoint = isRegister ? '/auth/register' : '/auth/login';
 
     try {
       const { data } = await nextServer.post(endpoint, values);
+
       setUser(data);
+
+      toast.success(isRegister ? 'Реєстрація успішна!' : 'Вхід виконано!');
 
       router.push('/');
       router.refresh();
     } catch (err: unknown) {
       let msg = 'Сталася помилка';
+
       if (axios.isAxiosError(err)) {
         msg = err.response?.data?.message || err.message;
       }
-      helpers.setStatus(msg);
+
+      toast.error(translateError(msg));
     } finally {
       helpers.setSubmitting(false);
     }
@@ -94,6 +130,7 @@ export default function AuthForm({ type }: AuthFormProps) {
           >
             Реєстрація
           </Link>
+
           <Link
             href="/login"
             className={`${styles.tab} ${!isRegister ? styles.tabActive : ''}`}
@@ -103,6 +140,7 @@ export default function AuthForm({ type }: AuthFormProps) {
         </div>
 
         <h1 className={styles.title}>{isRegister ? 'Реєстрація' : 'Вхід'}</h1>
+
         <p className={styles.subtitle}>
           {isRegister
             ? 'Раді вас бачити у спільноті мандрівників!'
@@ -122,12 +160,12 @@ export default function AuthForm({ type }: AuthFormProps) {
             handleBlur,
             handleSubmit,
             isSubmitting,
-            status,
           }) => (
             <form className={styles.form} onSubmit={handleSubmit}>
               {isRegister && (
                 <label className={styles.field}>
                   <span className={styles.label}>Ім’я та Прізвище*</span>
+
                   <input
                     className={styles.input}
                     name="name"
@@ -138,6 +176,7 @@ export default function AuthForm({ type }: AuthFormProps) {
                     onBlur={handleBlur}
                     disabled={isSubmitting}
                   />
+
                   {touched.name && errors.name && (
                     <span className={styles.errorText}>{errors.name}</span>
                   )}
@@ -146,6 +185,7 @@ export default function AuthForm({ type }: AuthFormProps) {
 
               <label className={styles.field}>
                 <span className={styles.label}>Пошта*</span>
+
                 <input
                   className={styles.input}
                   name="email"
@@ -156,6 +196,7 @@ export default function AuthForm({ type }: AuthFormProps) {
                   onBlur={handleBlur}
                   disabled={isSubmitting}
                 />
+
                 {touched.email && errors.email && (
                   <span className={styles.errorText}>{errors.email}</span>
                 )}
@@ -163,6 +204,7 @@ export default function AuthForm({ type }: AuthFormProps) {
 
               <label className={styles.field}>
                 <span className={styles.label}>Пароль*</span>
+
                 <input
                   className={styles.input}
                   name="password"
@@ -173,12 +215,11 @@ export default function AuthForm({ type }: AuthFormProps) {
                   onBlur={handleBlur}
                   disabled={isSubmitting}
                 />
+
                 {touched.password && errors.password && (
                   <span className={styles.errorText}>{errors.password}</span>
                 )}
               </label>
-
-              {status && <div className={styles.errorText}>{status}</div>}
 
               <button
                 className={styles.button}
