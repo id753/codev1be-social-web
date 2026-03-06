@@ -1,81 +1,163 @@
-# CodeV1be Social Web
+🌍 Подорожники
 
-A fullstack social media platform built by the CodeV1be Team for sharing stories.
+Платформа для мандрівників, де можна поділитися історіями подорожей, знайти натхнення та приєднатися до спільноти однодумців ✈️
 
----
+📖 Про проєкт
 
-## Project Overview
+Подорожники — це багатосторінковий веб-застосунок для людей, які живуть подорожами 🌄
 
-This project is a modern social media platform built to demonstrate fullstack capabilities using Next.js and Node.js.  
+Платформа дозволяє:
 
-**Key Highlights:**
-- User authentication with db sessions
-- CRUD operations for posts and user profiles
-- Image uploads via Cloudinary
-- Efficient client-side caching with React Query
-- Modal previews with Next.js App Router intercepted routes
+📝 Публікувати та читати історії мандрівників
+🔖 Зберігати улюблені статті до свого профілю
+👥 Знайомитися з іншими мандрівниками
+✍️ Створювати та редагувати власні історії
+🔐 Реєструватися та авторизуватися
 
----
+🎯 Мета проєкту
 
-## Architecture
+Створити адаптивний MVP-застосунок, який:
 
-**Backend:**  
-- Node.js, Express.js 
-- MongoDB with Mongoose ORM  
-- Centralized error handling and input validation with `celebrate`  
+✅ Реалізує публічні та приватні маршрути
+🔗 Працює з бекендом через API
+🔐 Має систему авторизації
+📄 Підтримує серверну пагінацію
+💾 Має систему збереження статей
+🎨 Відповідає UI Kit та макету
 
-**Frontend:**  
-- Next.js 14 App Router  
-- Server and Client components separation  
-- React Query for data fetching and caching  
-- Modern-normalize + CSS Modules for styling
+## 🗂️ Структура сторінок
 
----
+| 📄 Сторінка | 🔗 Маршрут |
+|-------------|------------|
+| 🏠 Головна | `/` |
+| 📝 Реєстрація | `/auth/register` |
+| 🔐 Вхід | `/auth/login` |
+| 📚 Історії | `/stories` |
+| 📖 Окрема історія | `/stories/[storyId]` |
+| ➕ Створення історії | `/stories/create` |
+| ✏️ Редагування історії | `/stories/[storyId]/edit` |
+| 🌍 Мандрівники | `/travellers` |
+| 👤 Профіль мандрівника | `/travellers/[travellerId]` |
+| ⭐ Мій профіль / Збережені | `/profile` |
+| ⚙️ Редагування профілю | `/profile/edit` |
 
-## Technologies
 
-| Layer      | Technologies |
-|------------|--------------|
-| Frontend   | Next.js, React, React Query |
-| Backend    | Node.js, Express, MongoDB, Mongoose, Celebrate |
-| Deployment | Render.com, Vercel.com |
-| Other      | Cloudinary for media |
 
----
+🛠️ Технології
+⚙️ Ядро
 
-## Features
+Next.js 15 — App Router, SSR
 
-- User registration, login, logout
-- DB sessions & refresh token authentication
-- CRUD for posts and users
-- Image uploads
-- Real-time modals with intercepted routes
-- Category-based filtering
+React — побудова UI
 
----
+🎨 Стилізація
 
-## Technical Challenges Solved
+CSS Modules
 
-- Handling secure JWT authentication and refresh tokens  
-- Optimizing server/client rendering with Next.js App Router  
-- Implementing modal previews without full page reload  
-- Managing React Query cache efficiently  
-- Configuring CORS and environment variables for multiple services  
-- Deploying backend and frontend separately on Render  
+modern-normalize
 
----
+Mobile First (min-width)
 
-## Getting Started
+🧠 Стейт-менеджмент
 
-**Requirements:**
-- Node.js >= 20
-- npm
-- MongoDB instance
+Redux / Zustand
 
-**Steps:**
-- git clone https://github.com/Diamond-FoxUA/codev1be-social-web
-- cd codev1be-social
-- npm install
-- cp .env.example .env
-# fill in your environment variables
-- npm run dev
+🔄 Робота з API
+
+TanStack Query (React Query)
+
+кешування
+
+інвалідація
+
+background refetch
+
+🧾 Форми
+
+Formik
+
+Yup — валідація
+
+🔐 Авторизація
+
+Реалізовано:
+
+✅ Реєстрацію
+✅ Вхід
+🛡 Захист приватних сторінок
+🪟 Модальні підтвердження
+🔔 Toast-повідомлення
+
+📦 Основні компоненти
+
+Layout (Header + Footer + main)
+
+PopularStories
+
+TravellersStories
+
+TravellersList
+
+StoryDetails
+
+ConfirmModal
+
+AuthNavModal
+
+AddStoryForm
+
+PageToggle
+
+🚀 Запуск проєкту
+npm install
+npm run dev
+npm run build
+npm start
+
+
+🌐 Продакшн версія:
+https://codev1be-social-web.vercel.app/
+
+📁 Структура проєкту
+
+/
+├── app/
+├── components/
+├── hooks/
+├── lib/
+├── types/
+└── public/
+
+Додаток підтримує:
+
+🌞 Світлу тему
+🌙 Темну тему
+
+Колірна схема зберігається через глобальний стан або CSS-змінні.
+
+📌 Особливості реалізації
+
+⚡ Серверна пагінація
+🚀 Префетч даних
+♻️ Інвалідація кешу після мутацій
+⏳ Лоадери під час запитів
+🪟 Модалки з Escape + backdrop
+🧭 Динамічні маршрути
+📱 Бургер-меню для мобільних
+
+✨ Ключові функції
+
+🔐 Публічні та приватні маршрути
+📄 Серверна пагінація
+⭐ Збереження статей
+🔔 Toast-повідомлення
+⏳ Індикатори завантаження
+📱 Адаптивна навігація
+
+👥 Команда CodeV1be
+
+Проєкт розроблений командою в рамках навчального курсу 💻
+
+📄 Ліцензія
+
+© 2026 Подорожники. Усі права захищені.
