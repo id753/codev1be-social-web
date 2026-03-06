@@ -11,6 +11,7 @@ export default async function MainLayout({
       <Header />
       <main>{children}</main>
       <Footer />
+      <div id="modal-root" />
     </>
   );
 }
