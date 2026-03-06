@@ -1,32 +1,46 @@
-import serverApi from '@/app/api/api';
+import { cookies } from 'next/headers';
+import axios, { type AxiosResponse } from 'axios';
+import serverApi from '@/lib/api/api';
+import type { User } from '@/types/user';
+import type { Story } from '@/types/story';
 
-import { User } from '@/types/user';
-import { Story } from '@/types/story';
+const getCookieHeader = async () => {
+  const cookieStore = await cookies();
+  return { Cookie: cookieStore.toString() };
+};
 
 // ================= AUTH =================
 
-export async function getMeServer(): Promise<User | null> {
+export const getMeServer = async (): Promise<User | null> => {
   try {
-    const response = await serverApi.get<User>('/users/me');
-    return response.data;
+    const { data } = await serverApi.get<User>('/users/me', {
+      headers: await getCookieHeader(),
+    });
+    return data;
   } catch {
     return null;
   }
-}
+};
 
-export async function checkServerSession(): Promise<Response> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`, {
-    method: 'POST',
-    credentials: 'include',
-    cache: 'no-store',
+export const checkServerSession = async (): Promise<
+  AxiosResponse<{ success: boolean }>
+> => {
+  const cookieStore = await cookies();
+  const response = await serverApi.post<{ success: boolean }>(
+    '/auth/refresh',
+    null,
+    {
+      headers: { Cookie: cookieStore.toString() },
+    },
+  );
+  return response;
+};
+
+export const logoutServer = async (): Promise<void> => {
+  await serverApi.post('/auth/logout', null, {
+    headers: await getCookieHeader(),
   });
-
-  return res;
-}
-
-export async function logoutServer(): Promise<void> {
-  await serverApi.post('/auth/logout');
-}
+};
 
 // ================= USERS =================
 
@@ -43,15 +57,19 @@ export interface UsersHttpResponse {
   users: User[];
 }
 
-export async function fetchUsersServer(
+export const fetchUsersServer = async (
   params: FetchUsersParams,
-): Promise<UsersHttpResponse> {
-  const response = await serverApi.get('/users', {
-    params,
-  });
+): Promise<UsersHttpResponse> => {
+  const { data } = await serverApi.get('/users', { params });
+  return data;
+};
 
-  return response.data;
-}
+export const fetchUserByIdServer = async (
+  id: string,
+): Promise<{ user: User; stories: Story[] }> => {
+  const { data } = await serverApi.get(`/users/${id}`);
+  return data;
+};
 
 // ================= STORIES =================
 
@@ -69,43 +87,48 @@ export interface FetchStoriesParams {
   category?: string;
 }
 
-export async function fetchStoriesServer(
+export const fetchStoriesServer = async (
   params: FetchStoriesParams,
-): Promise<StoriesHttpResponse> {
-  const response = await serverApi.get('/stories', {
-    params,
-  });
+): Promise<StoriesHttpResponse> => {
+  const { data } = await serverApi.get('/stories', { params });
+  return data;
+};
 
-  return response.data;
-}
+export const fetchPopularStoriesServer = async () => {
+  const { data } = await serverApi.get('/stories/popular');
+  return data;
+};
 
-export async function fetchPopularStoriesServer() {
-  const response = await serverApi.get('/stories/popular');
+export const fetchStoryByIdServer = async (
+  id: string,
+): Promise<Story | null> => {
+  try {
+    const { data } = await serverApi.get(`/stories/${id}`);
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response?.status === 404) {
+      return null;
+    }
+    throw error;
+  }
+};
 
-  return response.data;
-}
-
-export async function fetchStoryByIdServer(id: string) {
-  const response = await serverApi.get(`/stories/${id}`);
-  return response.data;
-}
-
-export async function fetchMyStoriesServer(
+export const fetchMyStoriesServer = async (
   params: FetchStoriesParams,
-): Promise<StoriesHttpResponse> {
-  const response = await serverApi.get('/stories/me', {
+): Promise<StoriesHttpResponse> => {
+  const { data } = await serverApi.get('/stories/me', {
     params,
+    headers: await getCookieHeader(),
   });
+  return data;
+};
 
-  return response.data;
-}
-
-export async function fetchFavouriteStoriesServer(
+export const fetchFavouriteStoriesServer = async (
   params: FetchStoriesParams,
-): Promise<StoriesHttpResponse> {
-  const response = await serverApi.get('/stories/saved', {
+): Promise<StoriesHttpResponse> => {
+  const { data } = await serverApi.get('/stories/saved', {
     params,
+    headers: await getCookieHeader(),
   });
-
-  return response.data;
-}
+  return data;
+};

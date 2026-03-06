@@ -1,13 +1,16 @@
 'use client';
 
+import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
-import styles from './AuthForm.module.css';
+import { useQueryClient } from '@tanstack/react-query';
+
 import { useAuthStore } from '@/lib/store/authStore';
 import nextServer from '@/lib/api/api';
+import styles from './AuthForm.module.css';
 
 // --- ТИПИ ---
 interface AuthValues {
@@ -26,29 +29,30 @@ interface AuthFormProps {
 
 // --- СХЕМИ ВАЛІДАЦІЇ ---
 const RegisterSchema = Yup.object().shape({
-  name: Yup.string().trim().max(32, 'Max 32').required("Обов'язково"),
+  name: Yup.string()
+    .trim()
+    .max(32, 'Максимум 32 символи')
+    .required("Обов'язково"),
   email: Yup.string()
     .email('Невірний email')
-    .max(64, 'Max 64')
+    .max(64, 'Максимум 64 символи')
     .required("Обов'язково"),
   password: Yup.string()
-    .min(8, 'Min 8')
-    .max(138, 'Max 138')
+    .min(8, 'Мінімум 8 символів')
+    .max(138, 'Максимум 138 символів')
     .required("Обов'язково"),
 });
 
 const LoginSchema = Yup.object().shape({
-  email: Yup.string()
-    .email('Невірний email')
-    .max(64, 'Max 64')
-    .required("Обов'язково"),
+  email: Yup.string().email('Невірний email').required("Обов'язково"),
   password: Yup.string().required("Обов'язково"),
 });
 
 export default function AuthForm({ type }: AuthFormProps) {
   const router = useRouter();
-  const isRegister = type === 'register';
   const { setUser } = useAuthStore();
+
+  const isRegister = type === 'register';
 
   const initialValues: AuthValues = {
     email: '',
@@ -56,67 +60,23 @@ export default function AuthForm({ type }: AuthFormProps) {
     ...(isRegister ? { name: '' } : {}),
   };
 
-  // const handleSubmit = async (
-  //   values: AuthValues,
-  //   helpers: FormikHelpers<AuthValues>,
-  // ) => {
-  //   helpers.setStatus(null);
-
-  //   const endpoint = isRegister ? '/api/auth/register' : '/api/auth/login';
-
-  //   try {
-  //     await axios.post(endpoint, values);
-
-  //     router.push('/');
-  //     router.refresh();
-  //   } catch (err: unknown) {
-  //     let msg = 'Server error';
-  //     if (axios.isAxiosError(err)) {
-  //       const data = err.response?.data as ApiErrorData | undefined;
-  //       msg = data?.message ?? err.message ?? msg;
-  //     }
-  //     helpers.setStatus(msg);
-  //   } finally {
-  //     helpers.setSubmitting(false);
-  //   }
-  // };
-
-  // Переконайся, що вгорі всередині компонента виклик стору виглядає так:
-  // const { setUser } = useAuthStore();
-
   const handleSubmit = async (
     values: AuthValues,
     helpers: FormikHelpers<AuthValues>,
   ) => {
     helpers.setStatus(null);
-
-    const endpoint = isRegister ? '/auth/register' : '/auth/login';
+    const endpoint = type === 'register' ? '/auth/register' : '/auth/login';
 
     try {
-      // 1. Отримуємо дані користувача з відповіді бекенду
       const { data } = await nextServer.post(endpoint, values);
-
-      //     І це саме те, що треба, бо nextServer має:
-      // -	withCredentials: true
-      // -	refresh interceptor
-      // -	retry queue
-      // тобто тепер кукі надсилаються
-
-      // 2. ОЦЕЙ РЯДОК ВИПРАВЛЯЄ ТВОЮ ПРОБЛЕМУ:
-      // Ми записуємо юзера в глобальний стан Zustand ПЕРЕД редиректом.
-      // Тепер Header миттєво побачить, що isAuthenticated = true.
       setUser(data);
 
-      // 3. Тепер переходимо
       router.push('/');
-
-      // 4. Оновлюємо серверні компоненти (щоб layout побачив нові куки)
       router.refresh();
     } catch (err: unknown) {
-      let msg = 'Server error';
+      let msg = 'Сталася помилка';
       if (axios.isAxiosError(err)) {
-        const data = err.response?.data as ApiErrorData | undefined;
-        msg = data?.message ?? err.message ?? msg;
+        msg = err.response?.data?.message || err.message;
       }
       helpers.setStatus(msg);
     } finally {
@@ -226,7 +186,7 @@ export default function AuthForm({ type }: AuthFormProps) {
                 disabled={isSubmitting}
               >
                 {isSubmitting
-                  ? '...'
+                  ? 'Завантаження...'
                   : isRegister
                     ? 'Зареєструватись'
                     : 'Увійти'}

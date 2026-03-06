@@ -1,54 +1,35 @@
-// app/api/auth/logout/route.ts
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import axios from 'axios';
+import { isAxiosError } from 'axios';
 import serverApi from '@/app/api/api';
 
 export async function POST() {
-  const cookieHeader = (await cookies())
-    .getAll()
-    .filter((c) =>
-      ['accessToken', 'refreshToken', 'sessionId'].includes(c.name),
-    )
-    .map((c) => `${c.name}=${c.value}`)
-    .join('; ');
+  const cookieStore = await cookies();
 
-  // даже если backend logout упадёт — мы всё равно чистим cookies на фронте
   try {
-    await serverApi.post('/auth/logout', null, {
-      headers: cookieHeader ? { cookie: cookieHeader } : {},
-    });
-  } catch (e) {
-    if (!axios.isAxiosError(e)) {
-      // ignore
+    // Відправляємо запит на логаут до бекенду.
+    // Interceptor у serverApi сам додасть куки до запиту.
+    await serverApi.post('/auth/logout');
+  } catch (error) {
+    // Якщо бекенд недоступний, ми просто логуємо це і йдемо далі чистити фронтенд
+    if (isAxiosError(error)) {
+      console.error('Backend logout failed:', error.response?.data);
     }
   }
 
-  const secure = process.env.NODE_ENV === 'production';
-  const res = new NextResponse(null, { status: 204 });
+  // Створюємо відповідь
+  const response = NextResponse.json(
+    { message: 'Logged out' },
+    { status: 200 },
+  );
 
-  // delete reliably (match path + sameSite + secure)
-  res.cookies.set('accessToken', '', {
-    httpOnly: true,
-    secure,
-    sameSite: 'lax',
-    path: '/',
-    maxAge: 0,
-  });
-  res.cookies.set('refreshToken', '', {
-    httpOnly: true,
-    secure,
-    sameSite: 'lax',
-    path: '/',
-    maxAge: 0,
-  });
-  res.cookies.set('sessionId', '', {
-    httpOnly: true,
-    secure,
-    sameSite: 'lax',
-    path: '/',
-    maxAge: 0,
+  // Список кук, які треба видалити
+  const cookiesToDelete = ['accessToken', 'refreshToken', 'sessionId'];
+
+  // Видаляємо куки через cookieStore (це змінить заголовки відповіді автоматично)
+  cookiesToDelete.forEach((name) => {
+    cookieStore.delete(name);
   });
 
-  return res;
+  return response;
 }

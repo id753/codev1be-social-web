@@ -5,8 +5,6 @@ import './globals.css';
 import QueryProvider from './providers/QueryProvider';
 import ToastProvider from '@/components/ToastProvider/ToastProvider';
 import AuthNavModal from '@/components/AuthNavModal/AuthNavModal';
-import AuthInitializer from '@/components/AuthInitializer/AuthInitializer';
-import { getMeServer } from '@/lib/api/serverApi';
 
 const nunito = Nunito_Sans({
   variable: '--font-nunito-sans',
@@ -26,15 +24,10 @@ const baseUrl = process.env.NEXT_PUBLIC_APP_URL;
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl!),
-
-  title: {
-    default: 'Подорожники',
-    template: '%s | Подорожники',
-  },
+  title: { default: 'Подорожники', template: '%s | Подорожники' },
   description:
     'Платформа для мандрівників: переглядай історії інших та діліться своїми пригодами.',
   keywords: ['travel', 'stories', 'social network', 'nextjs'],
-
   openGraph: {
     title: 'Подорожники',
     description:
@@ -52,7 +45,6 @@ export const metadata: Metadata = {
       },
     ],
   },
-
   twitter: {
     card: 'summary_large_image',
     title: 'Подорожники',
@@ -60,29 +52,22 @@ export const metadata: Metadata = {
       'Платформа для мандрівників: переглядай історії інших та діліться своїми пригодами.',
     images: ['/preview.png'],
   },
-  icons: {
-    icon: '/favicon.ico',
-  },
+  icons: { icon: '/favicon.ico' },
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const user = await getMeServer();
-
   return (
     <html lang="uk">
       <body className={`${nunito.variable} ${inter.variable}`}>
         <QueryProvider>
-          <AuthInitializer initialUser={user}>
-            {children}
-
-            <ToastProvider />
-            <AuthNavModal />
-            <div id="modal-root" />
-          </AuthInitializer>
+          {children}
+          <ToastProvider />
+          <AuthNavModal />
+          <div id="modal-root" />
         </QueryProvider>
       </body>
     </html>

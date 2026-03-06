@@ -72,9 +72,6 @@ const StoryDetails = ({ storyId }: StoryDetailsProps) => {
     }
   };
 
-  /**
-   * щоб не мигала кнопка
-   */
   if (isChecking) {
     return (
       <div className={css.saveContainer}>
