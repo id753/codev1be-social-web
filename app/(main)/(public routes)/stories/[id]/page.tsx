@@ -12,6 +12,8 @@ export default async function Page({ params }: Props) {
 
   const story = await fetchStoryByIdServer(id);
 
+  if (!story) notFound();
+
   return (
     <>
       <div className={css.wrapper}>
