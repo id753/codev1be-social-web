@@ -91,8 +91,8 @@ export default function ProfileStoriesClient({ variant }: Props) {
       const [cats, data] = await Promise.all([fetchCategories(), fetchPage(1)]);
       setCategories(cats);
       setStories(data.stories);
-      setPage(data.page);
-      setTotalPages(data.totalPages);
+      setPage(data.page ?? 1);
+      setTotalPages(data.totalPages ?? 1);
     } catch {
       setError('Не вдалося завантажити історії. Спробуйте оновити сторінку.');
     } finally {
@@ -118,8 +118,8 @@ export default function ProfileStoriesClient({ variant }: Props) {
       const data = await fetchPage(nextPage);
 
       setStories((prev) => [...prev, ...data.stories]);
-      setPage(data.page);
-      setTotalPages(data.totalPages);
+      setPage(data.page ?? 1);
+      setTotalPages(data.totalPages ?? 1);
     } catch {
       setError('Не вдалося завантажити більше історій.');
     } finally {
