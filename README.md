@@ -3,7 +3,7 @@
 ## [Live Project](https://codev1be-social-web.vercel.app/)
 ⚠️ Note: The server is on a free plan, so it may take 30-50s to wake up 🚀 on the first load.
 ## [Backend Code](https://github.com/id753/codev1be-social-api)
-/*апвпапап    */
+<!--![Figma design](https://www.figma.com/design/ewaTZiOFs6engtdjD0JhQv/%D0%9F%D0%BE%D0%B4%D0%BE%D1%80%D0%BE%D0%B6%D0%BD%D0%B8%D0%BA%D0%B8?node-id=6383-168&p=f&t=0qkuxLEriOzeXzMe-0) -->
 ## My Key Deliverables
 
 ### Backend: 
