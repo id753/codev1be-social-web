@@ -1,13 +1,22 @@
 #🌍 Подорожники
 ## Платформа для мандрівників, де можна поділитися історіями подорожей, знайти натхнення та приєднатися до спільноти однодумців ✈️
+
 ## My Key Deliverables
 
 ### Backend:
-Implemented private endpoints for updating user data, including secure email change verification via confirmation email. Also developed endpoints for fetching current user data and handling password reset flow (request reset email and reset password).
-### Frontend:
-Developed the Story page with dynamic content loading, including detailed story information, responsive popular articles section, and user interactions like saving stories. Added loading states and SEO optimization (generateMetadata, Open Graph, Twitter).
+Developed secure private endpoints for user profile management, implementing robust data validation with Celebrate/Joi and JWT-based authentication. Designed and integrated a dual-stage email verification system and a password reset flow using Nodemailer and SMTP to ensure secure data updates.
+     
+     router.get('/me', authenticate, getCurrentUser);
+     router.patch('/me', authenticate, celebrate(updateUserSchema), updateUser);
+     router.post('/auth/request-reset-email',celebrate(requestResetEmailSchema),requestResetEmail,);
+     router.post('/auth/reset-password',celebrate(resetPasswordSchema),resetPassword,);
 
-📖 Про проєкт
+### Frontend:
+Engineered a dynamic, SEO-friendly StoryPage utilizing Next.js dynamic routing. Implemented complex data fetching with integrated loading states and a responsive UI that adapts content density (2-3 articles) across mobile, tablet, and desktop views. Developed an interactive 'Save to Favorites' feature with real-time state synchronization via backend API integration.
+
+    route: /stories/[storyId]
+
+## 📖 Про проєкт
 
 Подорожники — це багатосторінковий веб-застосунок для людей, які живуть подорожами 🌄
 
