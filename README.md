@@ -1,6 +1,11 @@
-🌍 Подорожники
+#🌍 Подорожники
+## Платформа для мандрівників, де можна поділитися історіями подорожей, знайти натхнення та приєднатися до спільноти однодумців ✈️
+## My Key Deliverables
 
-Платформа для мандрівників, де можна поділитися історіями подорожей, знайти натхнення та приєднатися до спільноти однодумців ✈️
+### Backend:
+Implemented private endpoints for updating user data, including secure email change verification via confirmation email. Also developed endpoints for fetching current user data and handling password reset flow (request reset email and reset password).
+### Frontend:
+Developed the Story page with dynamic content loading, including detailed story information, responsive popular articles section, and user interactions like saving stories. Added loading states and SEO optimization (generateMetadata, Open Graph, Twitter).
 
 📖 Про проєкт
 
