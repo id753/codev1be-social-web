@@ -1,6 +1,6 @@
 # 🌍 Подорожники
 ### Платформа для мандрівників, де можна поділитися історіями подорожей, знайти натхнення та приєднатися до спільноти однодумців ✈️
-## [Live Project](codev1be-social-web.vercel.app/)   [Backend Code](https://github.com/id753/codev1be-social-api)
+## [Live Project](codev1be-social-web.vercel.app/)                 [Backend Code](https://github.com/id753/codev1be-social-api)
 ## My Key Deliverables
 
 ### Backend: 
