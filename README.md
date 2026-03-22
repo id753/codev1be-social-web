@@ -1,9 +1,9 @@
 # 🌍 Подорожники
 ### Платформа для мандрівників, де можна поділитися історіями подорожей, знайти натхнення та приєднатися до спільноти однодумців ✈️
-
+## [Live Project](codev1be-social-web.vercel.app/)   [Backend Code](https://github.com/id753/codev1be-social-api)
 ## My Key Deliverables
 
-### Backend:
+### Backend: 
 Developed secure private endpoints for user profile management, implementing robust data validation with Celebrate/Joi and JWT-based authentication. Designed and integrated a dual-stage email verification system and a password reset flow using Nodemailer and SMTP to ensure secure data updates.
      
      router.get('/me', authenticate, getCurrentUser);
