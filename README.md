@@ -20,7 +20,7 @@ Engineered a dynamic, SEO-friendly StoryPage utilizing Next.js dynamic routing. 
     route: /stories/[storyId]
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/d674f1ee-cce1-405a-a2c9-7af6db8784bd" alt="Подорожники App Screenshot" width="450" />
+  <img src="https://github.com/user-attachments/assets/ba2c2982-ce96-4e05-be85-6bb92c0af6e7" alt="Подорожники App Screenshot" width="450" />
   <br>
   <sub>Подорожники App Screenshot</sub>
 </p>
