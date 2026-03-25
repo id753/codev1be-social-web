@@ -19,6 +19,12 @@ Engineered a dynamic, SEO-friendly StoryPage utilizing Next.js dynamic routing. 
 
     route: /stories/[storyId]
 
+<p align="center">
+  <img src=" https://github.com/user-attachments/assets/d674f1ee-cce1-405a-a2c9-7af6db8784bd" " alt="Подорожники App Screenshot" width="450" />
+  <br>
+  <sub>Подорожники App Screenshot</sub>
+</p>
+
 ## 📖 Про проєкт
 
 Подорожники — це багатосторінковий веб-застосунок для людей, які живуть подорожами 🌄
